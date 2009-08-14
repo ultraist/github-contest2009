@@ -14,9 +14,15 @@ $|=1;
 
 sub sim
 {
-    my ($u1, $u2) = @_;
-    my ($n1, $n2) = (scalar(@$u1), scalar(@$u2));
-    my $ok = Utils::intersection_count($u1, $u2);
+    my ($a, $h) = @_;
+    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
+    my $ok = 0;
+
+    foreach my $k (@$a) {
+	if (defined($h->{$k})) {
+	    ++$ok;
+	}
+    }
     
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
@@ -47,8 +53,7 @@ co_occurrence_predict:
 	my %co_repos;
 	
 	foreach my $other_id (@{$user->sample_users()}) {
-	    my $other_repos = $user->repos($other_id);
-	    my $sim = sim($user_repos, $other_repos);
+	    my $sim = sim($user_repos, $user->hash_repos($other_id));
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim });
 	    }

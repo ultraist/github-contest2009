@@ -16,6 +16,7 @@ sub _load_user
 {
     my ($filename, $lang) = @_;
     my $user = {};
+    my $repo_hash = {};
     my $i = 0;
     
     open(U, $filename) or die $!;
@@ -24,10 +25,10 @@ sub _load_user
 	chomp($line);
 	my ($user_id, $repo_id) = split(":", $line);
 	if (!exists($user->{$user_id})) {
-	    $user->{$user_id} = [];
-	    push(@{$user->{$user_id}}, $repo_id);
+	    $user->{$user_id} = {};
+	    $user->{$user_id}->{$repo_id} = 1;
 	} else {
-	    push(@{$user->{$user_id}}, $repo_id);
+	    $user->{$user_id}->{$repo_id} = 1;
 	}
     }
     close(U);
@@ -40,16 +41,16 @@ sub _load_user
     my $samples = 0;
     
     foreach my $k (keys(%$user)) {
-	my $p = scalar(@{$user->{$k}});
+	my $p = scalar(keys(%{$user->{$k}}));
 	$avg += $p / $count;
     }
     foreach my $k (keys(%$user)) {
-	my $p = scalar(@{$user->{$k}});      
+	my $p = scalar(keys(%{$user->{$k}}));
 	$var += ($p - $avg) ** 2 / ($count - 1);
     }
     $sd = sqrt($var);
     foreach my $k (keys(%$user)) {
-	my $p = scalar(@{$user->{$k}});
+	my $p = scalar(keys(%{$user->{$k}}));
 	if ($avg / 2 < $p && $p < $avg + $sd) {
 	    $sample_user->{$k} = $user->{$k};
 	}
@@ -60,7 +61,7 @@ sub _load_user
     my $user_lang = {};
     foreach my $uid (keys(%$user)) {
 	my @skill_lang;
-	foreach my $rid (@{$user->{$uid}}) {
+	foreach my $rid (keys(%{$user->{$uid}})) {
 	    my $repo_lang = $lang->repo_langs($rid);
 	    if (defined($repo_lang)) {
 		push(@skill_lang, @{$repo_lang});
@@ -70,14 +71,23 @@ sub _load_user
 	push(@{$user_lang->{$uid}}, uniq(@skill_lang));
     }
     
-    return { id => $sample_user, all_id => $user, lang => $user_lang, n => $samples};
+    return { id => $sample_user, all_id => $user, hash => $repo_hash, lang => $user_lang, n => $samples};
 }
 
 sub repos
 {
     my ($self, $id) = @_;
+    my $repos = [];
+    if (defined($self->{all_id}->{$id})) {
+	@$repos = keys(%{$self->{all_id}->{$id}});
+    }
+    return $repos;
+}
 
-    return $self->{all_id}->{$id};
+sub hash_repos
+{
+   my ($self, $id) = @_;
+   return $self->{all_id}->{$id};
 }
 
 sub langs
