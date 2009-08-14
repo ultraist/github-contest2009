@@ -16,7 +16,7 @@ fork_predict:
     my $count = $test->count();
     my $i = 0;
     
-    open(R, ">result_fork.txt") or die $!;
+    open(R, ">results_fork.txt") or die $!;
     
     $repo->set_lang($lang);
     $repo->ranking($user);
@@ -25,18 +25,18 @@ fork_predict:
 	printf("recommend %.2f\r", 100 * $i / $count);
 	my @result_tmp;
 	my @result;
+	my $user_repos = $user->repos($uid);
 	
-	foreach my $rid (@{$repo->base_repos($uid)}) {
-	    push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
-	}
 	foreach my $rid (@{$repo->fork_repos($uid)}) {
 	    push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
 	}
 	@result_tmp = sort { $b->{rank} <=> $a->{rank} } @result_tmp;
 	foreach my $rid (@result_tmp) {
-	    push(@result, $rid->{id});
+	    if (!Utils::includes($user_repos, $rid->{id})) {
+		push(@result, $rid->{id});
+	    }
 	}
-	print R Result::format($uid, Utils::padding_result(@result));
+	print R Result::format($uid, @result);
         ++$i;
     }
     close(R);

@@ -10,4 +10,22 @@ sub padding_result
     return @result[0 .. 9];
 }
 
+sub includes
+{
+    my ($array, $value) = @_;
+    
+    foreach my $v (@$array) {
+	if ($v == $value) {
+	    return 1;
+	}
+    }
+    return undef;
+}
+
+sub intersections
+{
+    
+
+}
+
 1;
