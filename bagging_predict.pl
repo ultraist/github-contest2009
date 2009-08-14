@@ -32,7 +32,7 @@ sub rank_score
 {
     my $rank = shift;
 #    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
-    return 1.0;
+    return 1.0 / (1.0 + $rank);
 }
 
 sub load_recommender
