@@ -1,3 +1,5 @@
+use strict;
+use warnings;
 use Repo;
 use User;
 use Lang;
