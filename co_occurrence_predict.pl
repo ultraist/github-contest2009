@@ -6,7 +6,6 @@ use Lang;
 use Result;
 use Utils;
 
-
 use constant {
     K => 100
 };

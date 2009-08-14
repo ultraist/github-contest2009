@@ -4,4 +4,4 @@
 # base_predict       23.76  / 0.08082 = 293.9866
 # author_predict     16.37  / 0.67015 =  24.4273
 # language_predict    5.576 / 0.95050 =   5.8663
-# base_author_precit 
+# base_author_precit 21.80  / 0.46539 =  46.8424
