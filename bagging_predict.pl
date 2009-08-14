@@ -31,7 +31,8 @@ our @RECOMMENDER = (
 sub rank_score
 {
     my $rank = shift;
-    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
+#    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
+    return 1.0;
 }
 
 sub load_recommender
