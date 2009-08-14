@@ -49,7 +49,7 @@ sub _load_repo
     
     foreach my $id (keys(%$repo)) {
 	my $base_id = $repo->{$id}->{base};
-	if ($base_id) {
+	if (defined($base_id)) {
 	    if (!defined($repo->{$base_id}->{fork})) {
 	      $repo->{$base_id}->{fork} = [];
 	      push(@{$repo->{$base_id}->{fork}}, $id);
@@ -90,6 +90,12 @@ sub rank
 {
     my($self, $id) = @_;
     return $self->{id}->{$id}->{rank};
+}
+
+sub rate
+{
+    my($self, $id) = @_;
+    return $self->{id}->{$id}->{rate};
 }
 
 sub author_repos

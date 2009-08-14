@@ -36,6 +36,7 @@ fork_predict:
 	foreach my $rid (@result_tmp) {
 	    if (!Utils::includes($user_repos, $rid->{id})) {
 		push(@result, $rid->{id});
+		push(@$user_repos, $rid->{id});
 	    }
 	}
 	print R Result::format($uid, @result);
