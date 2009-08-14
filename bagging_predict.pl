@@ -18,13 +18,13 @@ $|=1;
 # base_author_precit    21.80  / 0.46539 =  46.8424
 # co_occurrence_predict 19.11  / 0.77637 = 24.61455
 our @RECOMMENDER = (
-		    { file => "./results_base.txt",          weight => 293.9866 },
-		    { file => "./results_base_author.txt",   weight => 46.8424 },
-		    { file => "./results_co_occurrence.txt", weight => 24.61455 },
-		    { file => "./results_author.txt",        weight => 24.4273 },
-		    { file => "./results_language.txt",      weight => 5.8663 },
-		    { file => "./results_ranking.txt",       weight => 5.8470 },		    
-		    { file => "./results_fork.txt",          weight => 4.9914 }
+		    { file => "./results_base.txt",          weight => 4.0 },
+		    { file => "./results_base_author.txt",   weight => 2.1 },
+		    { file => "./results_co_occurrence.txt", weight => 2.0 },
+		    { file => "./results_author.txt",        weight => 1.6 },
+		    { file => "./results_language.txt",      weight => 0.5 },
+		    { file => "./results_ranking.txt",       weight => 0.4 },		    
+		    { file => "./results_fork.txt",          weight => 0.3 }
 
 );
 
