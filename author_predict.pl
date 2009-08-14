@@ -6,7 +6,7 @@ use Utils;
 
 $|=1;
 
-base_predict:
+author_predict:
 {
     print "loading ..\r";
     my $repo = new Repo("./download/repos.txt");
