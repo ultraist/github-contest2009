@@ -8,14 +8,45 @@ use Utils;
 
 $|=1;
 
-our $RECOMMENDER = {
-    { file => "./results_fork.txt", weight => 4.9914 },
-    { file => "./results_base.txt", weight => 293.9866 },
-    { file => "./results_author.txt", weight => 24.4273 },
-    { file => "./results_language.txt", weight => 5.8663 },
-    { file => "./results_base_author_.txt", weight => 46.8424 },
-    { file => "./results_co_occurrence_.txt", weight => 46.8424 },
-};
+# recommender
+#
+# fork_predict           3.11  / 0.62306 =   4.9914
+# base_predict          23.76  / 0.08082 = 293.9866
+# author_predict        16.37  / 0.67015 =  24.4273
+# language_predict       5.576 / 0.95050 =   5.8663
+# ranking_predict        5.847 / 1.00000 =   5.8470
+# base_author_precit    21.80  / 0.46539 =  46.8424
+# co_occurrence_predict 19.11  / 0.77637 = 24.61455
+our @RECOMMENDER = (
+		    { file => "./results_base.txt",          weight => 293.9866 },
+		    { file => "./results_base_author.txt",   weight => 46.8424 },
+		    { file => "./results_co_occurrence.txt", weight => 24.61455 },
+		    { file => "./results_author.txt",        weight => 24.4273 },
+		    { file => "./results_language.txt",      weight => 5.8663 },
+		    { file => "./results_ranking.txt",       weight => 5.8470 },		    
+		    { file => "./results_fork.txt",          weight => 4.9914 }
+
+);
+
+sub rank_score
+{
+    my $rank = shift;
+    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
+}
+
+sub load_recommender
+{
+    my $recommender = [];
+
+    foreach my $rec (@RECOMMENDER) {
+	print "loading.. $rec->{file}\r";
+	my $result = new Result($rec->{file});
+	my $weight = $rec->{weight};
+	push(@$recommender, { result => $result, weight => $rec->{weight} });
+    }
+
+    return $recommender;
+}
 
 bagging_predict:
 {
@@ -26,24 +57,37 @@ bagging_predict:
     my $test = new Result("./download/test.txt", $lang);
     my $count = $test->count();
     my $i = 0;
+    my $recommender = load_recommender();
     
-    open(R, ">results_fork.txt") or die $!;
+    open(R, ">results_bagging.txt") or die $!;
     
     $repo->set_lang($lang);
     $repo->ranking($user);
 
+    print "ok..\n";
+    
     foreach my $uid (@{$test->users()}) {
 	printf("recommend %.2f\r", 100 * $i / $count);
 	my @result_tmp;
 	my @result;
+	my %reco_repo;
 	my $user_repos = $user->repos($uid);
 
-	foreach my $bid (@$user_repos) {
-	    foreach my $rid (@{$repo->fork_repos($bid)}) {
-		push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
+	foreach my $reco (@$recommender) {
+	    my $repos = $reco->{result}->repos($uid);
+
+	    for (my $i = 0; $i < @$repos; ++$i) {
+		if (!exists($reco_repo{$repos->[$i]})) {
+		    $reco_repo{$repos->[$i]} = 0.0;
+		}
+		$reco_repo{$repos->[$i]} += rank_score($i) * $reco->{weight};
 	    }
 	}
-	@result_tmp = sort { $a->{rank} <=> $b->{rank} } @result_tmp;
+	foreach my $rid (keys(%reco_repo)) {
+	    push(@result_tmp, { id => $rid, score => $reco_repo{$rid} });
+	}
+
+	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
 	foreach my $rid (@result_tmp) {
 	    if (!Utils::includes($user_repos, $rid->{id})) {
 		push(@result, $rid->{id});
