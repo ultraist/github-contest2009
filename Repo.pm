@@ -92,6 +92,12 @@ sub rank
     return $self->{id}->{$id}->{rank};
 }
 
+sub rank_id
+{
+    my($self, $rank) = @_;
+    return $self->{rank}->[$rank]->{id};
+}
+
 sub rate
 {
     my($self, $id) = @_;
