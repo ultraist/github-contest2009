@@ -1,7 +1,9 @@
-# name          success / sets
+# name                 success / sets
 
-# fork_predict        3.11  / 0.62306 =   4.9914
-# base_predict       23.76  / 0.08082 = 293.9866
-# author_predict     16.37  / 0.67015 =  24.4273
-# language_predict    5.576 / 0.95050 =   5.8663
-# base_author_precit 21.80  / 0.46539 =  46.8424
+# fork_predict           3.11  / 0.62306 =   4.9914
+# base_predict          23.76  / 0.08082 = 293.9866
+# author_predict        16.37  / 0.67015 =  24.4273
+# language_predict       5.576 / 0.95050 =   5.8663
+# ranking_predict        5.847 / 1.00000 =   5.8470
+# base_author_precit    21.80  / 0.46539 =  46.8424
+# co_occurrence_predict
