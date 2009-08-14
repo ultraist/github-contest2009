@@ -16,17 +16,20 @@ matrix_format:
     my $user = new User("./download/data.txt", $lang);
     my $i = 0;
 
-    open(RI, ">user.head") or die $!;
-    open(UI, ">repo.head") or die $!;
+    open(UI, ">user.head") or die $!;
+    open(RI, ">repo.head") or die $!;
     open(RD, ">repo.dat") or die $!;
 
     my @repo_ids = sort { $a <=> $b } @{$repo->repos()};
     my @user_ids = sort { $a <=> $b } @{$user->sample_users()};
-
-    print RI join(",", @repo_ids), "\n";
+    my %user_repos;
     print UI join(",", @user_ids), "\n";
-    close(RI);
     close(UI);
+    
+    for (my $m = 0; $m < @user_ids; ++$m) {
+	my $repos = $user->hash_repos($user_ids[$m]);
+	$user_repos{$user_ids[$m]} = $repos;
+    }
 
     # octave matrix
     # [u1r1,u2r1 .. uMr1 ]
@@ -34,13 +37,26 @@ matrix_format:
     # [..
     # [u1rN         uMrN ]
     for (my $n = 0; $n < @repo_ids; ++$n) {
+	my $repo_id = $repo_ids[$n];
+	my $line = '';
+	my $c = 0;
+	printf("repo ..%d\r", $n);
 	for (my $m = 0; $m < @user_ids; ++$m) {
-	    my $user_repo = $user->hash_repos($user_ids[$m]);
-	    print RD (defined($user_repos->{$repo_ids[$n]}) ? 1:0), " ";
+	    my $f = defined($user_repos{$user_ids[$m]}->{$repo_id}) ? 1:0;
+	    $line .= $f." ";
+	    $c += $f;
 	}
-	print "\n"
+	if ($c != 0) {
+	    if ($n != 0) {
+		print RI ",";
+	    }
+	    print RI "$repo_id";
+	    print RD "$line\n";
+	}
     }
+    print RI "\n";
     close(RD);
+    close(RI);
 }
 
     
