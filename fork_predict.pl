@@ -26,11 +26,13 @@ fork_predict:
 	my @result_tmp;
 	my @result;
 	my $user_repos = $user->repos($uid);
-	
-	foreach my $rid (@{$repo->fork_repos($uid)}) {
-	    push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
+
+	foreach my $bid (@$user_repos) {
+	    foreach my $rid (@{$repo->fork_repos($bid)}) {
+		push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
+	    }
 	}
-	@result_tmp = sort { $b->{rank} <=> $a->{rank} } @result_tmp;
+	@result_tmp = sort { $a->{rank} <=> $b->{rank} } @result_tmp;
 	foreach my $rid (@result_tmp) {
 	    if (!Utils::includes($user_repos, $rid->{id})) {
 		push(@result, $rid->{id});

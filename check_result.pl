@@ -2,9 +2,8 @@ use strict;
 use warnings;
 use Result;
 
-$ARGV[0] or die "usage: $0 result.txt\n";
 
-my $result = new Result($ARGV[0]);
+my $result = new Result("results.txt");
 my $all = 0;
 my $nonzero = 0;
 
