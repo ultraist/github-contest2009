@@ -61,7 +61,7 @@ sub _load_user
     foreach my $uid (keys(%$user)) {
 	my @skill_lang;
 	foreach my $rid (@{$user->{$uid}}) {
-	    my $repo_lang = $lang->repo_lang($rid);
+	    my $repo_lang = $lang->repo_langs($rid);
 	    if (defined($repo_lang)) {
 		push(@skill_lang, @{$repo_lang});
 	    }

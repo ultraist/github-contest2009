@@ -55,7 +55,7 @@ sub _read_lang
     return $lang;
 }
 
-sub repo_lang
+sub repo_langs
 {
     my ($self, $id) = @_;
     my $langs = [];

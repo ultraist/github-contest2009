@@ -22,10 +22,19 @@ sub includes
     return undef;
 }
 
-sub intersections
+sub intersection_count
 {
+    my ($a1, $a2) = @_;
+    my $ok = 0;
     
-
+    foreach my $v1 (@$a1) {
+	foreach my $v2 (@$a2) {
+	    if ($v1 == $v2) {
+		++$ok;
+	    }
+	}
+    }
+    return $ok;
 }
 
 1;
