@@ -10,16 +10,16 @@ use constant {
     K => 100
 };
 $|=1;
-
+our $e = 2.71828183;
 sub sim
 {
-    my ($a, $h) = @_;
+    my ($a, $h, $repo) = @_;
     my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
     my $ok = 0;
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    ++$ok;
+	    $ok += log($e + 1.0 / $repo->rate($k));
 	}
     }
     
@@ -52,7 +52,7 @@ co_occurrence_predict:
 	my %co_repos;
 	
 	foreach my $other_id (@{$user->sample_users()}) {
-	    my $sim = sim($user_repos, $user->hash_repos($other_id));
+	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo);
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim });
 	    }
