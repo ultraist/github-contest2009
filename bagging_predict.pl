@@ -23,16 +23,16 @@ our @RECOMMENDER = (
 		    { file => "./results_co_occurrence.txt", weight => 2.0 },
 		    { file => "./results_author.txt",        weight => 1.6 },
 		    { file => "./results_language.txt",      weight => 0.5 },
-		    { file => "./results_ranking.txt",       weight => 0.4 },
-		    { file => "./results_fork.txt",          weight => 0.3 }
+		    { file => "./results_ranking.txt",       weight => 0.4 }
+#		    { file => "./results_fork.txt",          weight => 0.3 }
 
 );
 
 sub rank_score
 {
     my $rank = shift;
-    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
-#    return (1.0 / (1.0 + $rank));
+#    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
+    return (1.0 / (1.0 + $rank));
 }
 
 sub load_recommender
