@@ -15,7 +15,8 @@ matrix_format:
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
     my $i = 0;
-
+    my $nonzero = 0;
+    
     open(UI, ">user.head") or die $!;
     open(RI, ">repo.head") or die $!;
     open(RD, ">repo.dat") or die $!;
@@ -24,6 +25,7 @@ matrix_format:
     my @user_ids = sort { $a <=> $b } @{$user->sample_users()};
     my %user_repos;
     print UI join(",", @user_ids), "\n";
+    print RI join(",", @repo_ids), "\n";
     close(UI);
     
     for (my $m = 0; $m < @user_ids; ++$m) {
@@ -31,30 +33,32 @@ matrix_format:
 	$user_repos{$user_ids[$m]} = $repos;
     }
 
-    # octave matrix
-    # [u1r1,u2r1 .. uMr1 ]
-    # [u1r2,   ..
-    # [..
-    # [u1rN         uMrN ]
-    for (my $n = 0; $n < @repo_ids; ++$n) {
-	my $repo_id = $repo_ids[$n];
-	my $line = '';
+    # sparse  matrix
+    my $rows = scalar(@repo_ids);
+    my $cols = scalar(@user_ids);
+    
+    for (my $m = 0; $m < @user_ids; ++$m) {
+	print "$m.. \r";
+	my $vec = $user_repos{$user_ids[$m]};
 	my $c = 0;
-	printf("repo ..%d\r", $n);
-	for (my $m = 0; $m < @user_ids; ++$m) {
-	    my $f = defined($user_repos{$user_ids[$m]}->{$repo_id}) ? 1:0;
-	    $line .= $f." ";
-	    $c += $f;
-	}
-	if ($c != 0) {
-	    if ($n != 0) {
-		print RI ",";
+	my $lines = "";
+	my @sparse = ();
+	for (my $n = 0; $n < @repo_ids; ++$n) {
+	    my $repo_id = $repo_ids[$n];
+	    if (defined($vec->{$repo_id})) {
+		push(@sparse, $n);
+		++$c;
 	    }
-	    print RI "$repo_id";
-	    print RD "$line\n";
 	}
+	$nonzero += $c;
+	print RD $c,"\n";
+	foreach my $n (@sparse) {
+	     $lines .= "$n 1\n";
+	}
+	print RD $lines;
     }
-    print RI "\n";
+    print "\n$rows $cols $nonzero\n";
+
     close(RD);
     close(RI);
 }
