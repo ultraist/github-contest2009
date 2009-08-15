@@ -11,7 +11,6 @@ use constant {
 };
 $|=1;
 
-
 sub sim
 {
     my ($a, $h) = @_;
@@ -63,11 +62,11 @@ co_occurrence_predict:
 	for (my $i = 0; $i < K && $i < scalar(@sim_users); ++$i) {
 	    my $other_repos = $user->repos($sim_users[$i]->{id});
 	    foreach my $rid (@$other_repos) {
-		my $w = (1.0 - $i / K) ** 2;
+		my $w = $sim_users[$i]->{sim};#(1.0 - $i / K) ** 2;
 		if (!exists($co_repos{$rid})) {
 		    $co_repos{$rid} = 0.0;
 		}
-		$co_repos{$rid} += $w + $kfrac * $repo->rate($rid);
+		$co_repos{$rid} += $w + $w * $kfrac * $repo->rate($rid);
 	    }
 	}
 	foreach my $rid (keys(%co_repos)) {
