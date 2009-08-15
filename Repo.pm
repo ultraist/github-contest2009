@@ -34,7 +34,7 @@ sub _load_repo
 	my ($name, $date, $base) = split(",", $footer);
 	my ($author_name, $repo_name) = split("/", $name);
 	
-	$repo->{$repo_id} = { rank => 0, base => $base, author => $author_name };
+	$repo->{$repo_id} = { rank => 0, base => $base, author => $author_name, name => $name };
 	
 	if (!defined($author->{$author_name})) {
 	    $author->{$author_name} = [];
@@ -60,6 +60,12 @@ sub _load_repo
     }
     
     return { id => $repo, author => $author, n => $i };
+}
+
+sub name
+{
+    my($self, $id) = @_;
+    return $self->{id}->{$id}->{name};
 }
 
 sub repos
