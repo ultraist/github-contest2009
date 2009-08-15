@@ -24,7 +24,7 @@ our @RECOMMENDER = (
 		    { file => "./results_co_occurrence.txt", weight => 1.0 * 1.25 },
 		    { file => "./results_author.txt",        weight => 1.0 * 0.5 },
 		    { file => "./results_language.txt",      weight => 0.05 },
-		    { file => "./results_ranking.txt",       weight => 0.02 }
+		    { file => "./results_ranking.txt",       weight => 0.1 }
 #		    { file => "./results_fork.txt",          weight => 1.0 }
 );
 
