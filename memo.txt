@@ -6,5 +6,5 @@
 # language_predict       5.576 / 0.95050 =   5.8663
 # ranking_predict        5.847 / 1.00000 =   5.8470
 # base_author_precit    21.80  / 0.46539 =  46.8424
-# co_occurrence_predict 19.11  / 0.77637 = 24.61455
-#			21.40
+# co_occurrence_predict 21.40  / 0.77637 =  27.5641
+#			

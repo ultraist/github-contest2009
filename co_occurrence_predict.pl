@@ -7,7 +7,7 @@ use Result;
 use Utils;
 
 use constant {
-    K => 100
+    K => 120
 };
 $|=1;
 our $e = 2.71828183;
@@ -19,7 +19,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1.0 / $repo->rate($k);
+	    $ok += log($e + 1.0 / $repo->rate($k));
 	}
     }
     
