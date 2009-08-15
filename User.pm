@@ -51,7 +51,7 @@ sub _load_user
     $sd = sqrt($var);
     foreach my $k (keys(%$user)) {
 	my $p = scalar(keys(%{$user->{$k}}));
-	if ($p < $avg + $sd) {
+	if ($avg / 4 < $p && $p < $avg + $sd / 2) {
 	    $sample_user->{$k} = $user->{$k};
 	}
     }
