@@ -45,9 +45,7 @@ language_predict:
 	for (my $i = 0; $i < 100; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
 	    if (match_lang($repo->langs($rank_id), $user->langs($uid))) {
-		push(@result_tmp, { id => $rank_id, rank => $i * 0.8});
-	    } else {
-		push(@result_tmp, { id => $rank_id, rank => $i });
+		push(@result_tmp, { id => $rank_id, rank => $i});
 	    }
 	}
 	@result_tmp = sort { $a->{rank} <=> $b->{rank} } @result_tmp;
