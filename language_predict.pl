@@ -8,6 +8,19 @@ use Utils;
 
 $|=1;
 
+sub match_lang
+{
+    my($repo, $user) = @_;
+
+    if (!$user || scalar(@$user) == 0) {
+	return 1;
+    }
+    if (!$repo || scalar(@$repo) == 0) {
+	return undef;
+    }
+    return Utils::intersection_count($repo, $user) > 0 ? 1:undef;
+}
+
 language_predict:
 {
     print "loading ..\r";
@@ -31,7 +44,7 @@ language_predict:
 
 	for (my $i = 0; $i < 100; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
-	    if (Utils::intersection_count($repo->langs($rank_id), $user->langs($uid)) > 0) {
+	    if (match_lang($repo->langs($rank_id), $user->langs($uid))) {
 		push(@result_tmp, { id => $rank_id, rank => $i });
 	    }
 	}

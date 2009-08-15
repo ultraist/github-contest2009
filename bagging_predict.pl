@@ -17,9 +17,10 @@ $|=1;
 # ranking_predict        5.847 / 1.00000 =   5.8470
 # base_author_precit    21.80  / 0.46539 =  46.8424
 # co_occurrence_predict 19.11  / 0.77637 = 24.61455
+
 our @RECOMMENDER = (
 		    { file => "./results_base.txt",          weight => 4.0 },
-		    { file => "./results_base_author.txt",   weight => 3.0 },
+		    { file => "./results_base_author.txt",   weight => 2.1 },
 		    { file => "./results_co_occurrence.txt", weight => 2.0 },
 		    { file => "./results_author.txt",        weight => 1.6 },
 		    { file => "./results_language.txt",      weight => 0.5 },
@@ -33,6 +34,7 @@ sub rank_score
 #    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
     return (1.0 / (1.0 + $rank));
 }
+
 
 sub load_recommender
 {
