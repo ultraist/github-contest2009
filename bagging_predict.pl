@@ -20,7 +20,7 @@ $|=1;
 
 our @RECOMMENDER = (
 		    { file => "./results_base.txt",          weight => 1.0 },
-		    { file => "./results_base_author.txt",   weight => 0.2 }
+		    { file => "./results_base_author.txt",   weight => 0.1 }
 #		    { file => "./results_co_occurrence.txt", weight => 2.0 },
 #		    { file => "./results_author.txt",        weight => 1.6 },
 #		    { file => "./results_language.txt",      weight => 0.5 },
