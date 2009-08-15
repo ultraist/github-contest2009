@@ -19,7 +19,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += log($e + 1.0 / $repo->rate($k));
+	    $ok += 1.0 / $repo->rate($k);
 	}
     }
     
