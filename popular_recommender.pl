@@ -84,10 +84,11 @@ popular_recommender:
 	for (my $i = 0; $i < 200; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
 	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
-
+	    my $fork_freq = forked_score($repo, $fork_factor, $rank_id);
+	    
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $lang_score + 0.1 * $repo->freq($rank_id)
+		score => $lang_score + ($repo->freq($rank_id) * $fork_freq)
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
