@@ -104,10 +104,10 @@ sub rank_id
     return $self->{rank}->[$rank]->{id};
 }
 
-sub rate
+sub freq
 {
     my($self, $id) = @_;
-    return $self->{id}->{$id}->{rate};
+    return $self->{id}->{$id}->{freq};
 }
 
 sub author_repos
@@ -154,22 +154,22 @@ sub ranking
     foreach my $uid (@{$user->users()}) {
 	my $repos = $user->repos($uid);
 	foreach my $rid (@$repos) {
-	    $self->{id}->{$rid}->{rate} += 1.0;
+	    $self->{id}->{$rid}->{freq} += 1.0;
 	}
     }
     foreach my $rid (keys(%{$self->{id}})) {
-	if ($max_count < $self->{id}->{$rid}->{rate}) {
-	    $max_count = $self->{id}->{$rid}->{rate};
+	if ($max_count < $self->{id}->{$rid}->{freq}) {
+	    $max_count = $self->{id}->{$rid}->{freq};
 	}
     }
     my $factor = 1.0 / $max_count;
     foreach my $rid (keys(%{$self->{id}})) {
-	$self->{id}->{$rid}->{rate} *= $factor;
+	$self->{id}->{$rid}->{freq} *= $factor;
     }
 
     my $rank = [];
     foreach my $rid (keys(%{$self->{id}})) {
-	push(@$rank, { id => $rid, score => $self->{id}->{$rid}->{rate}});
+	push(@$rank, { id => $rid, score => $self->{id}->{$rid}->{freq}});
     }
     @$rank = sort { $b->{score} <=> $a->{score} } @$rank;
     $self->{rank} = $rank;

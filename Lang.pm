@@ -7,12 +7,12 @@ sub new
 {
     my ($pkg, $filename, $repo) = @_;
 
-    my $lang = _read_lang($filename, $repo);
+    my $lang = _load_lang($filename, $repo);
 
     return bless({ lang => $lang }, $pkg);
 }
 
-sub _read_lang
+sub _load_lang
 {
     my ($filename, $repo) = @_;
     my $lang = {};
@@ -55,6 +55,44 @@ sub _read_lang
     return $lang;
 }
 
+sub ranking
+{
+    my ($self, $repo) = @_;
+    my $freq = {};
+    my $max_count = 0;
+    
+    foreach my $id (@{$repo->repos()}) {
+	foreach my $lang (@{$self->repo_langs($id)}) {
+	    if (!exists($freq->{$lang})) {
+		$freq->{$lang} = { rank => 0, freq => 0.0 };
+	    }
+	    $freq->{$lang}->{freq} += 1.0;
+	}
+    }
+    foreach my $lang (keys(%$freq)) {
+	if ($max_count < $freq->{$lang}->{freq}) {
+	    $max_count = $freq->{$lang}->{freq};
+	}
+    }
+    my $factor = 1.0 / $max_count;
+    foreach my $lang (keys(%$freq)) {
+	$freq->{$lang}->{freq} *= $factor;
+    }
+    
+    my $rank = [];
+    foreach my $lang (keys(%$freq)) {
+	push(@$rank, {lang => $lang, freq => $freq->{$lang}->{freq}});
+    }
+    @$rank = sort { $b->{freq} <=> $a->{freq} } @$rank;
+    for (my $i = 0; $i < @$rank; ++$i) {
+	$rank->[$i]->{rank} = $i;
+	$freq->{$rank->[$i]}->{rank} = $i;
+    }
+
+    $self->{freq} = $freq;
+    $self->{rank} = $rank;
+}
+
 sub repo_langs
 {
     my ($self, $id) = @_;
@@ -65,6 +103,30 @@ sub repo_langs
     }
     
     return $langs;
+}
+
+sub rank
+{
+    my ($self, $lang) = @_;
+    if (!defined($self->{freq})) {
+	return undef;
+    }
+    return $self->{freq}->{$lang}->{rank};
+}
+
+sub freq
+{
+    my ($self, $lang) = @_;
+    if (!defined($self->{freq})) {
+	return undef;
+    }
+    return $self->{freq}->{$lang}->{freq};
+}
+
+sub ranks
+{
+    my ($self) = @_;
+    return $self->{rank};
 }
 
 

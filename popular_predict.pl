@@ -42,7 +42,7 @@ popular_predict:
 	my @result;
 	my $user_repos = $user->repos($uid);
 
-	for (my $i = 0; $i < 100; ++$i) {
+	for (my $i = 0; $i < 1000; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
 	    if (match_lang($repo->langs($rank_id), $user->langs($uid))) {
 		push(@result_tmp, { id => $rank_id, rank => $i});
