@@ -14,7 +14,7 @@ $|=1;
 # author_predict        16.37  / 0.67015 =  24.4273
 # popular_predict       5.576  / 0.95050 =   5.8663
 our @RECOMMENDER = (
-		    { file => "./results_base.txt",          weight => 3.0 },
+		    { file => "./results_base.txt",          weight => 2.0 },
 		    { file => "./results_co_occurrence.txt", weight => 1.6 },
 		    { file => "./results_author.txt",        weight => 0.5 },
 		    { file => "./results_popular.txt",       weight => 0.05 }
