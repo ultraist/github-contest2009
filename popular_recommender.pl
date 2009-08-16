@@ -95,13 +95,8 @@ popular_recommender:
 	    }
 	    @minor_langs = sort { $a->{freq} <=> $b->{freq} } @minor_langs;
 
-	    foreach my $l (@minor_langs) {
-		foreach my $r (@{$lang->lang_repos($l->{lang})}) {
-		    $lang_repos{$r} = 1;
-		}
-		if (++$c >= 3) {
-		    last;
-		}
+	    foreach my $r (@{$lang->lang_repos($minor_langs[0]->{lang})}) {
+		$lang_repos{$r} = 1;
 	    }
 	    
 	    foreach my $rid (keys(%lang_repos)) {
