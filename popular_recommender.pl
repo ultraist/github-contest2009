@@ -46,10 +46,10 @@ sub lang_score
 
 sub forked_score
 {
-    my ($repo, $id) = @_;
-    my $fork = $repo->fork_repos($id);
+    my ($repo, $factor, $id) = @_;
+    my $forks = scalar(@{$repo->fork_repos($id)});
 
-    return scalar(@$fork) > 0 ? 1.0:0.0;
+    return $factor * $forks;
 }
 
 popular_recommender:
@@ -68,6 +68,13 @@ popular_recommender:
     $repo->ranking($user);
     $lang->ranking($repo);
 
+    
+    my $no1_forks = scalar(@{$repo->fork_repos($repo->rank_id(0))});
+    my $fork_factor = 1.0 / $no1_forks;
+
+    print "\n",$no1_forks,"\n";
+    
+
     foreach my $uid (@{$test->users()}) {
 	printf("recommend %.2f\r", 100 * $i / $count);
 	my @result_tmp;
@@ -77,11 +84,11 @@ popular_recommender:
 	for (my $i = 0; $i < 300; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
 	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
-	    my $forked_score = forked_score($repo, $rank_id);
+	    my $forked_score = forked_score($repo, $fork_factor, $rank_id);
 	    
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $forked_score + 0.1 * $lang_score + 0.01 * $repo->freq($rank_id)
+		score => $forked_score + 0.01 * $lang_score + 0.001 * $repo->freq($rank_id)
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
