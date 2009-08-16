@@ -88,7 +88,7 @@ popular_recommender:
 	    
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $lang_score + ($repo->freq($rank_id) * $fork_freq)
+		score => $lang_score + 0.01 * ($repo->freq($rank_id) * $fork_freq)
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
