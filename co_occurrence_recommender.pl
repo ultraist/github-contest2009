@@ -10,7 +10,8 @@ use constant {
     K => 80
 };
 $|=1;
-our $e = 2.71828183;
+our $e = exp(1);
+
 sub sim
 {
     my ($a, $h, $repo) = @_;

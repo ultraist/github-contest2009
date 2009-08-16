@@ -1,4 +1,6 @@
 package Utils;
+use strict;
+use warnings;
 
 sub padding_result
 {
