@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    K => 10 
+    K => 30 
 };
 $|=1;
 
