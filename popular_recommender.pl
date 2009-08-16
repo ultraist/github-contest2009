@@ -81,14 +81,14 @@ popular_recommender:
 	my @result;
 	my $user_repos = $user->repos($uid);
 
-	for (my $i = 0; $i < 300; ++$i) {
+	for (my $i = 0; $i < 500; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
-	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
+#	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
 	    my $forked_score = forked_score($repo, $fork_factor, $rank_id);
-	    
+
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $forked_score + 0.01 * $lang_score + 0.001 * $repo->freq($rank_id)
+		score => $forked_score
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
