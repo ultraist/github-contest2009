@@ -26,7 +26,6 @@ sub match_lang_score
 {
     my($lang, $repo, $user) = @_;
     my $score = 0.0;
-
     
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
@@ -71,9 +70,9 @@ popular_recommender:
 	    my $rank_id = $repo->rank_id($i);
 	    my $score = match_lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
 
-	    push(@result_tmp, { id => $rank_id, score => $score + 0.1 * $i });
+	    push(@result_tmp, { id => $rank_id, score => $score + 0.1 * $repo->freq($rank_id) });
 	}
-	@result_tmp = sort { $a->{score} <=> $b->{score} } @result_tmp;
+	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
 	foreach my $rid (@result_tmp) {
 	    if (!Utils::includes($user_repos, $rid->{id})) {
 		push(@result, $rid->{id});
