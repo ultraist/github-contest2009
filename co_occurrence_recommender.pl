@@ -26,7 +26,7 @@ sub sim
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
 
-co_occurrence_predict:
+co_occurrence_recommender:
 {
     print "loading ..\r";
     my $repo = new Repo("./download/repos.txt");
