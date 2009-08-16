@@ -10,7 +10,7 @@ $|=1;
 
 forkbase_recommender:
 {
-    print "loading ..\r";
+    print "$0: loading ..\r";
     my $repo = new Repo("./download/repos.txt");
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
@@ -24,7 +24,8 @@ forkbase_recommender:
     $repo->ranking($user);
 
     foreach my $uid (@{$test->users()}) {
-	printf("recommend %.2f\r", 100 * $i / $count);
+	printf("$0: %.2f%%      \r", 100 * $i / $count);
+	
 	my @result_tmp;
 	my @result;
 	my $user_repos = $user->repos($uid);

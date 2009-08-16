@@ -29,7 +29,7 @@ sub sim
 
 co_occurrence_recommender:
 {
-    print "loading ..\r";
+    print "$0: loading ..\r";
     my $repo = new Repo("./download/repos.txt");
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
@@ -44,7 +44,7 @@ co_occurrence_recommender:
     $repo->ranking($user);
 
     foreach my $uid (@{$test->users()}) {
-	printf("recommend %.2f\r", 100 * $i / $count);
+	printf("$0: %.2f%%      \r", 100 * $i / $count);
 	my @nn;
 	my @result;
 	my @result_tmp;

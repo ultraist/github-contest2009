@@ -40,7 +40,7 @@ sub load_recommender
 
 bagging_recommender:
 {
-    print "loading ..\r";
+    print "$0: loading ..\r";
     my $repo = new Repo("./download/repos.txt");
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
@@ -57,7 +57,7 @@ bagging_recommender:
     print "ok..\n";
     
     foreach my $uid (@{$test->users()}) {
-	printf("recommend %.2f\r", 100 * $i / $count);
+	printf("$0: %.2f%%      \r", 100 * $i / $count);
 	my @result_tmp;
 	my @result;
 	my %reco_repo;

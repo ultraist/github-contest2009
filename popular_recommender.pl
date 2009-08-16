@@ -59,7 +59,7 @@ sub repo_score
 
 popular_recommender:
 {
-    print "loading ..\r";
+    print "$0: loading ..\r";
     my $repo = new Repo("./download/repos.txt");
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
@@ -77,10 +77,8 @@ popular_recommender:
     my $no1_forks = scalar(@{$repo->fork_repos($repo->rank_id(0))});
     my $fork_factor = 1.0 / $no1_forks;
 
-    print "\n",$no1_forks,"\n";
-    
     foreach my $uid (@{$test->users()}) {
-	printf("recommend %.2f\r", 100 * $i / $count);
+	printf("$0: %.2f%%      \r", 100 * $i / $count);
 	my @result_tmp;
 	my @result;
 	my $user_repos = $user->repos($uid);
