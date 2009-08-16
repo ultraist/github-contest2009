@@ -55,6 +55,31 @@ sub _load_lang
     return $lang;
 }
 
+sub make_lang_repos
+{
+    my ($self, $repo) = @_;
+    my $lang_repos = {};
+    
+    foreach my $id (@{$repo->repos()}) {
+	foreach my $lang (@{$self->repo_langs($id)}) {
+	    if (!defined($lang_repos->{$lang})) {
+		$lang_repos->{$lang} = [];
+	    }
+	    push(@{$lang_repos->{$lang}}, $id);
+	}
+    }
+    $self->{lang_repos} = $lang_repos;
+}
+
+sub lang_repos
+{
+    my ($self, $lang) = @_;
+    if (!defined($self->{lang_repos})) {
+	return undef;
+    }
+    return $self->{lang_repos}->{$lang};
+}
+
 sub ranking
 {
     my ($self, $repo) = @_;
