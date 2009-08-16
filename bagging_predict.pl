@@ -8,33 +8,23 @@ use Utils;
 
 $|=1;
 
-# recommender
-#
-# fork_predict           3.11  / 0.62306 =   4.9914
-# base_predict          23.76  / 0.08082 = 293.9866
-# author_predict        16.37  / 0.67015 =  24.4273
-# language_predict       5.576 / 0.95050 =   5.8663
-# ranking_predict        5.847 / 1.00000 =   5.8470
-# base_author_precit    21.80  / 0.46539 =  46.8424
-# co_occurrence_predict 19.11  / 0.77637 = 24.61455
 
+# base_predict          23.76  / 0.08082 = 293.9866
+# co_occurrence_predict 24.54  / 0.80470 =  30.4958
+# author_predict        16.37  / 0.67015 =  24.4273
+# popular_predict       5.576  / 0.95050 =   5.8663
 our @RECOMMENDER = (
-		    { file => "./results_base.txt",          weight => 4.0 },
-#		    { file => "./results_base_author.txt",   weight => 0.2 },
-		    { file => "./results_co_occurrence.txt", weight => 1.0 },
-		    { file => "./results_author.txt",        weight => 0.3 },
-		    { file => "./results_language.txt",      weight => 0.01  }
-#		    { file => "./results_ranking.txt",       weight => 0.005 }
-#		    { file => "./results_fork.txt",          weight => 0.05 }
+		    { file => "./results_base.txt",          weight => 2.0 },
+		    { file => "./results_co_occurrence.txt", weight => 1.6 },
+		    { file => "./results_author.txt",        weight => 0.5 },
+		    { file => "./results_popular.txt",       weight => 0.05 }
 );
 
 sub rank_score
 {
     my $rank = shift;
-#    return 1.0 / (1.0 + exp(0.5 * ($rank - 10)));
     return (1.0 / (1.0 + $rank));
 }
-
 
 sub load_recommender
 {
