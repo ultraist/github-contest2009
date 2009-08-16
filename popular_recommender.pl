@@ -37,7 +37,8 @@ sub lang_score
     foreach my $user_lang (@$user) {
 	foreach my $repo_lang (@$repo) {
 	    if ($user_lang eq $repo_lang) {
-		$score *= $lang->freq($user_lang);#log($e + 1.0 / $lang->freq($user_lang));
+		$score *= (1.0 - $lang->freq($user_lang));
+               #$score += log($e + 1.0 / $lang->freq($user_lang));
 	    }
 	}
     }
