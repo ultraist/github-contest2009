@@ -25,7 +25,7 @@ sub match_lang
 sub lang_score
 {
     my($lang, $repo, $user) = @_;
-    my $score = 1.0;
+    my $score = 0.0;
     
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
@@ -37,8 +37,7 @@ sub lang_score
     foreach my $user_lang (@$user) {
 	foreach my $repo_lang (@$repo) {
 	    if ($user_lang eq $repo_lang) {
-		$score *= (1.0 - $lang->freq($user_lang));
-               #$score += log($e + 1.0 / $lang->freq($user_lang));
+               $score += log($e + 1.0 / $lang->freq($user_lang));
 	    }
 	}
     }
@@ -82,13 +81,13 @@ popular_recommender:
 	my @result;
 	my $user_repos = $user->repos($uid);
 
-	for (my $i = 0; $i < 500; ++$i) {
+	for (my $i = 0; $i < 200; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
 	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
 
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $repo->freq($rank_id) * $lang_score
+		score => $lang_score + 0.1 * $repo->freq($rank_id)
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
