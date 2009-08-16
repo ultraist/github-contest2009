@@ -88,12 +88,11 @@ popular_recommender:
 
 	for (my $i = 0; $i < 200; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
-#	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
-	    my $score = repo_score($repo, $rank_id);
-	    
+	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
+
 	    push(@result_tmp, {
 		id => $rank_id,
-		score => $score
+		score => $lang_score + 1.0 / (1.0 + $i)
 	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
