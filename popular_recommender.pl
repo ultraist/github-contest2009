@@ -88,16 +88,20 @@ popular_recommender:
 
 	if (defined($langs) && scalar(@$langs) > 0) {
 	    my %lang_repos;
-	    my $most_minor_lang;
 	    my @minor_langs;
+	    my $c = 0;
 	    foreach my $l (@$langs) {
 		push(@minor_langs, { lang => $l, freq => $lang->freq($l) });
 	    }
 	    @minor_langs = sort { $a->{freq} <=> $b->{freq} } @minor_langs;
-	    $most_minor_lang = $minor_langs[0]->{lang};
-	    
-	    foreach my $r (@{$lang->lang_repos($most_minor_lang)}) {
-		$lang_repos{$r} = 1;
+
+	    foreach my $l (@minor_langs) {
+		foreach my $r (@{$lang->lang_repos($most_minor_lang)}) {
+		    $lang_repos{$r} = 1;
+		}
+		if (++$c >= 3) {
+		    last;
+		}
 	    }
 	    
 	    foreach my $rid (keys(%lang_repos)) {

@@ -5,7 +5,9 @@ use User;
 use Lang;
 use Result;
 use Utils;
-
+use constant {
+    K => 20
+};
 $|=1;
 
 
@@ -64,7 +66,7 @@ bagging_recommender:
 	foreach my $reco (@$recommender) {
 	    my $repos = $reco->{result}->repos($uid);
 
-	    for (my $i = 0; $i < @$repos; ++$i) {
+	    for (my $i = 0; $i < K && $i < @$repos; ++$i) {
 		if (!exists($reco_repo{$repos->[$i]})) {
 		    $reco_repo{$repos->[$i]} = 0.0;
 		}
