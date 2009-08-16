@@ -1,8 +1,8 @@
 #!/bin/sh
 
-TIMELOG="./log"
+TIMELOG="./timelog"
 
-echo start `date` >> $TIMELOG
+echo `date` start >> $TIMELOG
 
 # make temporary results
 perl forkbase_recommender.pl
@@ -14,7 +14,7 @@ perl popular_recommender.pl
 perl bagging_recommender.pl
 
 # make results
-perl conv_results.pl ./results_bagging.txt
-perl check_results.pl
+perl conv_result.pl ./results_bagging.txt
+perl check_result.pl
 
-echo end `date` >> $TIMELOG
+echo `date` end >> $TIMELOG
