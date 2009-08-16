@@ -22,7 +22,7 @@ sub match_lang
     return Utils::intersection_count($repo, $user) > 0 ? 1:undef;
 }
 
-sub match_lang_score
+sub lang_score
 {
     my($lang, $repo, $user) = @_;
     my $score = 0.0;
@@ -42,6 +42,14 @@ sub match_lang_score
 	}
     }
     return $score;
+}
+
+sub forked_score
+{
+    my ($repo, $id) = @_;
+    my $fork = $repo->fork_repos($id);
+
+    return scalar(@$fork) > 0 ? 1.0:0.0;
 }
 
 popular_recommender:
@@ -68,9 +76,13 @@ popular_recommender:
 
 	for (my $i = 0; $i < 300; ++$i) {
 	    my $rank_id = $repo->rank_id($i);
-	    my $score = match_lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
-
-	    push(@result_tmp, { id => $rank_id, score => $score + 0.1 * $repo->freq($rank_id) });
+	    my $lang_score = lang_score($lang, $repo->langs($rank_id), $user->langs($uid));
+	    my $forked_score = forked_score($repo, $rank_id);
+	    
+	    push(@result_tmp, {
+		id => $rank_id,
+		score => $forked_score + 0.1 * $lang_score + 0.01 * $repo->freq($rank_id)
+	    });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
 	foreach my $rid (@result_tmp) {
