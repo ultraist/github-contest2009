@@ -8,7 +8,7 @@ use Utils;
 
 $|=1;
 
-author_predict:
+forkbase_recommender:
 {
     print "loading ..\r";
     my $repo = new Repo("./download/repos.txt");
@@ -18,7 +18,7 @@ author_predict:
     my $count = $test->count();
     my $i = 0;
     
-    open(R, ">results_author.txt") or die $!;
+    open(R, ">results_forkbase.txt") or die $!;
     
     $repo->set_lang($lang);
     $repo->ranking($user);
@@ -29,8 +29,8 @@ author_predict:
 	my @result;
 	my $user_repos = $user->repos($uid);
 
-	foreach my $tid (@$user_repos) {
-	    foreach my $rid (@{$repo->author_repos($tid)}) {
+	foreach my $bid (@$user_repos) {
+	    foreach my $rid (@{$repo->base_repos($bid)}) {
 		push(@result_tmp, { id => $rid, rank => $repo->rank($rid) });
 	    }
 	}

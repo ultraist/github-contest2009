@@ -9,12 +9,8 @@ use Utils;
 $|=1;
 
 
-# base_predict          23.76  / 0.08082 = 293.9866
-# co_occurrence_predict 24.54  / 0.80470 =  30.4958
-# author_predict        16.37  / 0.67015 =  24.4273
-# popular_predict       5.576  / 0.95050 =   5.8663
 our @RECOMMENDER = (
-		    { file => "./results_base.txt",          weight => 2.0 },
+		    { file => "./results_forkbase.txt",      weight => 2.0 },
 		    { file => "./results_co_occurrence.txt", weight => 1.6 },
 		    { file => "./results_author.txt",        weight => 0.5 },
 		    { file => "./results_popular.txt",       weight => 0.05 }
@@ -40,7 +36,7 @@ sub load_recommender
     return $recommender;
 }
 
-bagging_predict:
+bagging_recommender:
 {
     print "loading ..\r";
     my $repo = new Repo("./download/repos.txt");

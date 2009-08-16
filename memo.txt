@@ -1,6 +1,6 @@
 # name                 success / sets
 
-# base_predict          23.76  / 0.08082 = 293.9866
-# co_occurrence_predict 24.54  / 0.80470 =  30.4958
-# author_predict        16.37  / 0.67015 =  24.4273
-# popular_predict       5.576  / 0.95050 =   5.8663
+# forkbase          23.76  / 0.08082 = 293.9866
+# co_occurrence     24.54  / 0.80470 =  30.4958
+# author            16.37  / 0.67015 =  24.4273
+# popular            5.576 / 0.95050 =   5.8663
