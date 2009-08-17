@@ -9,7 +9,7 @@ use Result;
 use Utils;
 
 use constant {
-    K => 30
+    K => 180
 };
 
 $|=1;
@@ -51,6 +51,9 @@ sub repo_vector
 lsa:
 {
     print "loading ..\r";
+    #my $ut = pdl load_Ut();
+    #writefraw($ut, "ut.dat");
+    my $ut = readfraw("ut.dat");
     my $repo = new Repo("./download/repos.txt");
     my $lang = new Lang("./download/lang.txt", $repo);
     my $user = new User("./download/data.txt", $lang);
@@ -61,22 +64,19 @@ lsa:
     my @repo_ids = sort { $a <=> $b } @{$repo->repos()};
     
     open(R, ">svd_repo.txt") or die $!;
-    #my $ut = pdl load_Ut();
-    #writefraw($ut, "ut.dat");
-    my $ut = readfraw("ut.dat");
 
     my $c = 0;
     foreach my $uid (@{$user->users()}) {
 	print "$c\r"; ++$c;
 	my $vec = pdl repo_vector($user->hash_repos($uid), \@repo_ids);
-	my $decomp = $ut x $vec;
+	my $d = $ut x $vec;
 	my $line = "$uid:";
 
 	for (my $i = 0; $i < K; ++$i) {
 	    if ($i != 0) {
 		$line .= ",";
 	    }
-	    $line .= at($decomp, 0, $i);
+	    $line .= at($d, 0, $i);
 	}
 	print R $line,"\n";
     }
