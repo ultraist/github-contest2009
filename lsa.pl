@@ -24,8 +24,6 @@ sub load_Ut
     chomp($line);
     my ($row, $col) = split(" ", $line);
     $row = K;
-    print "$row, $col\n";
-    print "alloc\n";
     my $i = 0;
     while ($line = <UT>) {
 	chomp($line);
@@ -60,7 +58,6 @@ lsa:
     my $count = $test->count();
     my $i = 0;
 
-    print "go..\n";
     my @repo_ids = sort { $a <=> $b } @{$repo->repos()};
     
     open(R, ">svd_repo.txt") or die $!;
