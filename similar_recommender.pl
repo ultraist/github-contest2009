@@ -5,7 +5,7 @@ use User;
 use Lang;
 use Result;
 use Utils;
-
+use List::MoreUtils qw/uniq/;
 use constant {
     K => 20
 };
@@ -26,7 +26,7 @@ sub sim
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
 
-co_occurrence_recommender:
+similar_recommender:
 {
     srand (100);
     print "$0: loading ..\r";
@@ -56,13 +56,14 @@ co_occurrence_recommender:
 	    my @sim_repos;
 	    my @candidates;
 
-	    if ($repo->freq($rid) > 0.01) {
+	    if ($repo->freq($rid) > 0.05) {
 		next;
 	    }
 
 	    foreach my $ruid (@$repos_user) {
 		push(@candidates, @{$user->repos($ruid)});
 	    }
+	    @candidates = uniq(@candidates);
 
 	    foreach my $other_id (@candidates) {
 		my $sim = sim($repos_user, $repo->hash_users($other_id), $user);

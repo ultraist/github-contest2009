@@ -15,7 +15,7 @@ our @RECOMMENDER = (
 		    { file => "./results_forkbase.txt",      weight => 2.0 },
 		    { file => "./results_co_occurrence.txt", weight => 1.6 },
 		    { file => "./results_author.txt",        weight => 0.5 },
-		    { file => "./results_similar.txt",       weight => 0.06 },
+		    { file => "./results_similar.txt",       weight => 0.1 },
 		    { file => "./results_popular.txt",       weight => 0.05 }
 );
 
