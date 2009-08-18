@@ -67,7 +67,7 @@ co_occurrence_recommender:
 		if (!exists($co_repos{$rid})) {
 		    $co_repos{$rid} = 0.0;
 		}
-		$co_repos{$rid} += $w ;#$kfrac * $repo->freq($rid);
+		$co_repos{$rid} += $w;
 	    }
 	}
 	foreach my $rid (keys(%co_repos)) {
