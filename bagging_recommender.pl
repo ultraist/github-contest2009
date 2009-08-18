@@ -12,7 +12,7 @@ $|=1;
 
 
 our @RECOMMENDER = (
-		    { file => "./results_forkbase.txt",      weight => 2.0 },
+		    { file => "./results_forkbase.txt",      weight => 5.0 },
 		    { file => "./results_co_occurrence.txt", weight => 1.6 },
 		    { file => "./results_author.txt",        weight => 0.5 },
 		    { file => "./results_similar.txt",       weight => 0.2 },
@@ -22,7 +22,7 @@ our @RECOMMENDER = (
 sub rank_score
 {
     my $rank = shift;
-    return (1.0 / (0.5 + $rank));
+    return (1.0 / (0.1 + $rank));
 }
 
 sub load_recommender
