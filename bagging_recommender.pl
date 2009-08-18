@@ -5,18 +5,15 @@ use User;
 use Lang;
 use Result;
 use Utils;
-use constant {
-    K => 20
-};
 $|=1;
 
 
 our @RECOMMENDER = (
-		    { file => "./results_forkbase.txt",      weight => 3.0 },
-		    { file => "./results_co_occurrence.txt", weight => 1.6 },
-		    { file => "./results_author.txt",        weight => 0.5 },
-		    { file => "./results_similar.txt",       weight => 0.2 },
-		    { file => "./results_popular.txt",       weight => 0.05 }
+		    { file => "./results_forkbase.txt",      weight => 2.5,  K => 20 },
+		    { file => "./results_co_occurrence.txt", weight => 1.6,  K => 20 },
+		    { file => "./results_author.txt",        weight => 0.5,  K => 20 },
+		    { file => "./results_similar.txt",       weight => 0.2,  K => 10 },
+		    { file => "./results_popular.txt",       weight => 0.05, K => 10 }
 );
 
 sub rank_score
@@ -33,7 +30,7 @@ sub load_recommender
 	print "loading.. $rec->{file}\r";
 	my $result = new Result($rec->{file});
 	my $weight = $rec->{weight};
-	push(@$recommender, { result => $result, weight => $rec->{weight} });
+	push(@$recommender, { result => $result, weight => $rec->{weight}, K => $rec->{K} });
     }
 
     return $recommender;
@@ -66,8 +63,7 @@ bagging_recommender:
 
 	foreach my $reco (@$recommender) {
 	    my $repos = $reco->{result}->repos($uid);
-
-	    for (my $i = 0; $i < K && $i < @$repos; ++$i) {
+	    for (my $i = 0; $i < $reco->{K} && $i < @$repos; ++$i) {
 		if (!exists($reco_repo{$repos->[$i]})) {
 		    $reco_repo{$repos->[$i]} = 0.0;
 		}
