@@ -20,7 +20,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += log(1.0 / $repo->freq($k));
+	    $ok += log($e + 1.0 / $repo->freq($k));
 	}
     }
     
@@ -67,7 +67,7 @@ co_occurrence_recommender:
 		if (!exists($co_repos{$rid})) {
 		    $co_repos{$rid} = 0.0;
 		}
-		$co_repos{$rid} += $w + $w * $kfrac * $repo->freq($rid);
+		$co_repos{$rid} += $w ;#$kfrac * $repo->freq($rid);
 	    }
 	}
 	foreach my $rid (keys(%co_repos)) {
