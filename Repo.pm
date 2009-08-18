@@ -179,4 +179,41 @@ sub ranking
     }
 }
 
+sub set_users
+{
+    my ($self, $user) = @_;
+    my $repo_users = {};
+
+    foreach my $uid (@{$user->users()}) {
+	my $repos = $user->repos($uid);
+	foreach my $rid (@$repos) {
+	    if (!defined($repo_users->{$rid})) {
+		$repo_users->{$rid} = {};
+	    }
+	    $repo_users->{$rid}->{$uid} = 1;
+	}
+    }
+    $self->{user} = $repo_users;
+}
+
+sub hash_users
+{
+    my ($self, $id) = @_;
+    if (!defined($self->{user})) {
+	return undef;
+    }
+    return $self->{user}->{$id};
+}
+
+sub users
+{
+    my ($self, $id) = @_;
+    my $users = [];
+    if (!defined($self->{user})) {
+	return undef;
+    }
+    @$users = keys(%{$self->{user}->{$id}});
+    return $users;
+}
+
 1;
