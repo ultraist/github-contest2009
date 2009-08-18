@@ -12,7 +12,7 @@ $|=1;
 
 
 our @RECOMMENDER = (
-		    { file => "./results_forkbase.txt",      weight => 2.5 },
+		    { file => "./results_forkbase.txt",      weight => 3.0 },
 		    { file => "./results_co_occurrence.txt", weight => 1.6 },
 		    { file => "./results_author.txt",        weight => 0.5 },
 		    { file => "./results_similar.txt",       weight => 0.2 },
