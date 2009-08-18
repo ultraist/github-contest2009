@@ -22,7 +22,7 @@ our @RECOMMENDER = (
 sub rank_score
 {
     my $rank = shift;
-    return (1.0 / (3.0 + $rank));
+    return (1.0 / (0.5 + $rank));
 }
 
 sub load_recommender
