@@ -15,7 +15,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1
+	    $ok += 1;
 	}
     }
     if ($ok == 0) {
@@ -24,7 +24,6 @@ sub sim
     my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
-
 
 sub author_score
 {
@@ -38,7 +37,7 @@ sub author_score
 	    $max_sim = $sim;
 	}
     }
-    return $max_sim + 0.01 * $repo->freq($id);
+    return $max_sim + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:

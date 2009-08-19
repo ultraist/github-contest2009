@@ -10,7 +10,6 @@ echo `date` start >> $TIMELOG
 perl forkbase_recommender.pl
 perl author_recommender.pl
 perl co_occurrence_recommender.pl
-perl similar_recommender.pl
 perl popular_recommender.pl
 
 # ensemble
