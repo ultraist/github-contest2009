@@ -2,6 +2,25 @@ package Utils;
 use strict;
 use warnings;
 
+sub remove_list
+{
+    my ($a, $remove_list) = @_;
+    my @ret;
+    my %h;
+
+    foreach my $r (@$remove_list) {
+	$h{$r} = 1;
+    }
+    
+    for my $v (@$a) {
+	if (!defined($h{$v})) {
+	    push(@ret, $v);
+	}
+    }
+    return @ret;
+}
+
+
 sub uniq
 {
     my @a = @_;

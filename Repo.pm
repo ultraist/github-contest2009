@@ -34,7 +34,7 @@ sub _load_repo
 	my ($name, $date, $base) = split(",", $footer);
 	my ($author_name, $repo_name) = split("/", $name);
 	
-	$repo->{$repo_id} = { rank => 0, freq => 0.0, base => $base, author => $author_name, name => $name };
+	$repo->{$repo_id} = { rank => 0, freq => 0.0, base => $base, author => $author_name, name => $repo_name };
 	
 	if (!defined($author->{$author_name})) {
 	    $author->{$author_name} = [];
