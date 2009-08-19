@@ -11,8 +11,8 @@ $|=1;
 our @RECOMMENDER = (
 		    { file => "./results_forkbase.txt",      weight => 2.0,  K => 20 },
 		    { file => "./results_co_occurrence.txt", weight => 1.5,  K => 20 },
-		    { file => "./results_similar.txt",       weight => 0.25,  K => 20 },
-		    { file => "./results_author.txt",        weight => 0.25,  K => 20 },
+		    { file => "./results_author.txt",        weight => 0.5,  K => 20 },
+		    { file => "./results_similar.txt",       weight => 0.2,  K => 20 },
 		    { file => "./results_popular.txt",       weight => 0.05, K => 20 }
 );
 
@@ -36,7 +36,7 @@ sub load_recommender
     return $recommender;
 }
 
-bagging_recommender:
+ensemble_recommender:
 {
     print "$0: loading ..\r";
     my $repo = new Repo("./download/repos.txt");
@@ -47,7 +47,7 @@ bagging_recommender:
     my $i = 0;
     my $recommender = load_recommender();
     
-    open(R, ">results_bagging.txt") or die $!;
+    open(R, ">results_ensemble.txt") or die $!;
     
     $repo->set_lang($lang);
     $repo->ranking($user);
