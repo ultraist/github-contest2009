@@ -4,10 +4,13 @@ TIMELOG="./timelog"
 
 echo `date` start >> $TIMELOG
 
+./switch_contest.sh
+
 # make temporary results
 perl forkbase_recommender.pl
 perl author_recommender.pl
 perl co_occurrence_recommender.pl
+perl similar_recommender.pl
 perl popular_recommender.pl
 
 # ensemble
