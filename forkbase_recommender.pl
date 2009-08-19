@@ -39,7 +39,7 @@ sub forkbase_score
 	    $max_sim = $sim;
 	}
     }
-    return $max_sim + 0.01 * $repo->freq($id);
+    return $max_sim + 0.0001 * $repo->freq($id);
 }
 
 
