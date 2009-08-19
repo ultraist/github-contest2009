@@ -2,6 +2,21 @@ package Utils;
 use strict;
 use warnings;
 
+sub uniq
+{
+    my @a = @_;
+    my @unique;
+    my %h = ();
+    
+    for my $v (@a) {
+	if (!defined($h{$v})) {
+	    push(@unique, $v);
+	    $h{$v} = 1;
+	}
+    }
+    return @unique;
+}
+
 sub padding_result
 {
     my @result = @_;

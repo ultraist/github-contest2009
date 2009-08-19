@@ -1,7 +1,7 @@
 package Lang;
 use strict;
 use warnings;
-use List::MoreUtils qw/uniq/;
+use Utils;
 
 sub new
 {
@@ -49,7 +49,7 @@ sub _load_lang
     }
 
     foreach my $id (keys(%$lang)) {
-	@{$lang->{$id}} = uniq(@{$lang->{$id}});
+	@{$lang->{$id}} = Utils::uniq(@{$lang->{$id}});
     }
 
     return $lang;

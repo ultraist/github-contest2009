@@ -1,7 +1,7 @@
 package User;
 use strict;
 use warnings;
-use List::MoreUtils qw/uniq/;
+use Utils;
 
 sub new 
 {
@@ -68,7 +68,7 @@ sub _load_user
 	    }
 	}
 	$user_lang->{$uid} = [];
-	push(@{$user_lang->{$uid}}, uniq(@skill_lang));
+	push(@{$user_lang->{$uid}}, Utils::uniq(@skill_lang));
     }
     
     return { id => $sample_user, all_id => $user, hash => $repo_hash, lang => $user_lang, n => $samples};
