@@ -10,12 +10,12 @@ $|=1;
 our $e = exp(1);
 sub sim
 {
-    my ($a, $h, $repo) = @_;
+    my ($a, $h) = @_;
     my $ok = 0;
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1;
+	    $ok += 1
 	}
     }
     if ($ok == 0) {
@@ -28,7 +28,7 @@ sub sim
 
 sub author_score
 {
-    my ($repo, $user_repos, $id) = @_;
+    my ($repo, $user, $user_repos, $id) = @_;
     my $max_sim = 0.0;
     my $users = $repo->users($id);
 
@@ -64,10 +64,28 @@ author_recommender:
 	my @result;
 	my @user_repos = @{$user->repos($uid)};
 	my @origin_user_repos = @user_repos;
+	my %author_freq;
+	my $max_count = 0;
+	
+	foreach my $tid (@user_repos) {
+	    ++$author_freq{$repo->author($tid)};
+	}
+	foreach my $a (keys(%author_freq)) {
+	    if ($max_count < $author_freq{$a}) {
+		$max_count = $author_freq{$a};
+	    }
+	}
+	if ($max_count > 0) {
+	    my $factor = 1.0 / $max_count;
+	    foreach my $a (keys(%author_freq)) {
+		$author_freq{$a} *= $factor;
+	    }
+	}
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
+		my $a = $repo->author($rid);
 		printf("$0: $tid\r");
-		push(@result_tmp, { id => $rid, score => author_score($repo, \@origin_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
