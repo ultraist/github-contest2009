@@ -15,7 +15,6 @@ our $e = exp(1);
 sub sim
 {
     my ($a, $h, $repo) = @_;
-    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
     my $ok = 0;
 
     foreach my $k (@$a) {
@@ -23,7 +22,10 @@ sub sim
 	    $ok += log($e + 1.0 / $repo->freq($k));
 	}
     }
-    
+    if ($ok == 0.0) {
+	return 0.0;
+    }
+    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
 
@@ -62,8 +64,8 @@ co_occurrence_recommender:
 
 	for (my $i = 0; $i < K && $i < scalar(@sim_users); ++$i) {
 	    my $other_repos = $user->repos($sim_users[$i]->{id});
+	    my $w = $sim_users[$i]->{sim};#(1.0 - $i / K) ** 2;
 	    foreach my $rid (@$other_repos) {
-		my $w = $sim_users[$i]->{sim};#(1.0 - $i / K) ** 2;
 		if (!exists($co_repos{$rid})) {
 		    $co_repos{$rid} = 0.0;
 		}

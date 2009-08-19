@@ -63,11 +63,11 @@ author_recommender:
 	my @result_tmp;
 	my @result;
 	my @user_repos = @{$user->repos($uid)};
-	my @orign_user_repos = @user_repos;
+	my @origin_user_repos = @user_repos;
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
 		printf("$0: $tid\r");
-		push(@result_tmp, { id => $rid, score => author_score($repo, \@orign_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score => author_score($repo, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
