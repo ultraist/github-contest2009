@@ -7,7 +7,7 @@ use Result;
 use Utils;
 use List::MoreUtils qw/uniq/;
 use constant {
-    M => 1
+    M => 2
 };
 $|=1;
 our $e = exp(1);
