@@ -19,7 +19,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1;
+	    $ok += log(1.0 / scalar(@{$user->repos($k)}));
 	}
     }
     my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
@@ -56,7 +56,7 @@ similar_recommender:
 	    my @sim_repos;
 	    my @candidates;
 
-	    if ($repo->freq($rid) > 0.05) {
+	    if ($repo->freq($rid) > 0.1) {
 		next;
 	    }
 
@@ -73,7 +73,7 @@ similar_recommender:
 	    }
 	    @sim_repos = sort { $b->{sim} <=> $a->{sim} } @sim_repos;
 	    if (@sim_repos > K) {
-		@sim_repos = @sim_repos[0 .. 19];
+		@sim_repos = @sim_repos[0 .. K - 1];
 	    }
 	    push(@result_tmp, @sim_repos);
 	}
