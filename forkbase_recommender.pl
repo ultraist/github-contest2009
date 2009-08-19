@@ -71,7 +71,7 @@ forkbase_recommender:
 	foreach my $bid (@user_repos) {
 	    my @rel_repo;
 	    push(@rel_repo, @{$repo->base_repos($bid)});
-	    push(@rel_repo, @{$repo->fork_repos($bid)});
+#	    push(@rel_repo, @{$repo->fork_repos($bid)});
 	    @rel_repo = uniq(@rel_repo);
 	    
 	    foreach my $rid (@rel_repo) {
