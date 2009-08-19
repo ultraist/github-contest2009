@@ -5,7 +5,7 @@ use User;
 use Lang;
 use Result;
 use Utils;
-
+use List::MoreUtils qw/uniq/;
 $|=1;
 
 
@@ -69,7 +69,12 @@ forkbase_recommender:
 	my $user_repos = $user->repos($uid);
 
 	foreach my $bid (@user_repos) {
-	    foreach my $rid (@{$repo->base_repos($bid)}) {
+	    my @rel_repo;
+	    push(@rel_repo, @{$repo->base_repos($bid)});
+	    push(@rel_repo, @{$repo->fork_repos($bid)});
+	    @rel_repo = uniq(@rel_repo);
+	    
+	    foreach my $rid (@rel_repo) {
 		push(@result_tmp, { id => $rid, score => forkbase_score($repo, \@origin_user_repos, $rid) });
 	    }
 	}
