@@ -23,7 +23,7 @@ sub sim
 	}
     }
     my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
-    return $ok / ($n1 > $n2 ? $n2:$n1);
+    return $ok / ($n1 > $n2 ? $n1:$n2);
 }
 
 similar_recommender:
