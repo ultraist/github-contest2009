@@ -87,17 +87,16 @@ sub repo_score
     my $max_sim = 0.0;
     my $users = $repo->users($id);
 
-    return $repo->freq($id);
+#    return $repo->freq($id);
 
-#    foreach my $rid (@$user_repos) {
-#	my $sim = sim($users, $repo->hash_users($rid));
-#	if ($sim > $max_sim) {
-#	    $max_sim = $sim;
-#	}
-#    }
-#    return $max_sim + 0.0001 * $repo->freq($id);
+    foreach my $rid (@$user_repos) {
+	my $sim = sim($users, $repo->hash_users($rid));
+	if ($sim > $max_sim) {
+	    $max_sim = $sim;
+	}
+    }
+    return $max_sim + 0.0001 * $repo->freq($id);
 }
-
 
 name_recommender:
 {
