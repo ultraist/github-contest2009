@@ -4,17 +4,17 @@ use warnings;
 
 sub new
 {
-    my ($pkg, $filename) = @_;
-    my $result = _load_result($filename);
+    my ($pkg, $filename, $max) = @_;
+    my $result = _load_result($filename, $max);
 
     return bless({user => $result, n => scalar(keys(%$result)) }, $pkg);
 }
 
 sub _load_result
 {
-    my ($filename) = @_;
+    my ($filename, $max) = @_;
     my $user_repos = {};
-    
+    my $c = 0;
     open(T, $filename) or die $!;
 
     while (my $line = <T>) {
@@ -24,6 +24,9 @@ sub _load_result
 
 	if ($repo_line) {
 	    @repos = split(",", $repo_line);
+	    if (defined($max) && $max < scalar(@repos)) {
+		@repos = @repos[0 .. $max - 1];
+	    }
 	}
 	$user_repos->{$uid} = [];
 	push(@{$user_repos->{$uid}}, @repos);
