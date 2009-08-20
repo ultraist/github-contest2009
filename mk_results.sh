@@ -10,6 +10,7 @@ sh ./switch_contest.sh
 perl forkbase_recommender.pl
 perl author_recommender.pl
 perl co_occurrence_recommender.pl
+perl name_recommender.pl
 perl popular_recommender.pl
 
 # ensemble
