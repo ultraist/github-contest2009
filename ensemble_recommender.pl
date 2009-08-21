@@ -16,7 +16,7 @@ our @RECOMMENDER = (
 			file => "./results_forkbase.txt",
 			weight => 2.0,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 2; }
+			score => sub { 1; }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
