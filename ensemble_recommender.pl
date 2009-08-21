@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    DEF_K => 50
+    DEF_K => 20
 };
 $|=1;
 
