@@ -39,10 +39,8 @@ $|=1;
 	    redo;
 	}
 	$uids{$uid} = 1;
-	for (my $j = 0; $j < 3; ++$j) {
-	    my $rid = $repos->[rand(scalar(@$repos))];
-	    delete $user->{all_id}->{$uid}->{$rid};
-	}
+	my $rid = $repos->[rand(scalar(@$repos))];
+	delete $user->{all_id}->{$uid}->{$rid};
 	print T $uid,"\n";
     }
     foreach my $uid (@$users) {

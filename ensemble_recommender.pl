@@ -22,7 +22,7 @@ our @RECOMMENDER = (
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 0.9; }
+			score => sub { 1.0 / (1.5 + $_[0]) ** 0.5; }
 		    },
 		    {
 			file => "./results_author.txt",

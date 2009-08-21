@@ -39,7 +39,7 @@ $|=1;
 	    $success += $ok;
 	}
     }
-    printf("success: %f(%d/%d)\n", $success / ($test->count() * 3), $success, $test->count() * 3);
+    printf("success: %f(%d/%d)\n", $success / ($test->count() ), $success, $test->count() );
     for (my $i = 0; $i < 50; ++$i) {
 	printf("%d %d\n", $i, $count[$i] ? $count[$i]:0);
     }
