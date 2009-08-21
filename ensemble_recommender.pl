@@ -22,25 +22,25 @@ our @RECOMMENDER = (
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 0.5; }
+			score => sub { 1.0 / (1.5 + $_[0]) ** 0.8; }
 		    },
 		    {
 			file => "./results_author.txt",
 			weight => 0.5,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0] * 0.5) ** 0.9; }
+			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_name.txt",
 			weight => 0.05,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 0.9; }
+			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_popular.txt",
 			weight => 0.01,
 			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 1.1; }
+			score => sub { 1.0 / (1.5 + $_[0]); }
 		    }
 );
 
