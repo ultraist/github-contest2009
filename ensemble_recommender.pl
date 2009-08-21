@@ -5,15 +5,43 @@ use User;
 use Lang;
 use Result;
 use Utils;
+use constant {
+    DEF_K => 50
+};
 $|=1;
 
 
 our @RECOMMENDER = (
-		    { file => "./results_forkbase.txt",      weight => 2.0,  K => 20 },
-		    { file => "./results_co_occurrence.txt", weight => 1.5,  K => 20 },
-		    { file => "./results_author.txt",        weight => 0.5,  K => 20 },
-		    { file => "./results_name.txt",          weight => 0.05, K => 100 },
-		    { file => "./results_popular.txt",       weight => 0.05, K => 20 }
+		    {
+			file => "./results_forkbase.txt",
+			weight => 0.6888,
+			K => DEF_K,
+			score => sub { 1.0 / (1.0 + $_[0]) ** 2; }
+		    },
+		    {
+			file => "./results_co_occurrence.txt",
+			weight => 0.624,
+			K => DEF_K,
+			score => sub { 1.0 / (1.0 + $_[0]) ** 0.9; }
+		    },
+		    {
+			file => "./results_author.txt",
+			weight => 1.0,
+			K => DEF_K,
+			score => sub { 1.0 / (1.0 + $_[0] * 0.5) ** 1.6 }
+		    },
+		    {
+			file => "./results_name.txt",
+			weight => 0.2262,
+			K => DEF_K,
+			score => sub { 1.0 / (1.0 + $_[0]) ** 0.9; }
+		    },
+		    {
+			file => "./results_popular.txt",
+			weight => 0.0710,
+			K => DEF_K,
+			score => sub { 1.0 / (1.0 + $_[0]) ** 1.1; }
+		    }
 );
 
 sub rank_score
@@ -30,7 +58,7 @@ sub load_recommender
 	print "loading.. $rec->{file}\r";
 	my $result = new Result($rec->{file}, $rec->{K});
 	my $weight = $rec->{weight};
-	push(@$recommender, { result => $result, weight => $rec->{weight}, K => $rec->{K} });
+	push(@$recommender, { result => $result, weight => $rec->{weight}, K => $rec->{K}, score => $rec->{score} });
     }
 
     return $recommender;
@@ -63,11 +91,14 @@ ensemble_recommender:
 
 	foreach my $reco (@$recommender) {
 	    my $repos = $reco->{result}->repos($uid);
+	    if (!defined($repos)) {
+		next;
+	    }
 	    for (my $i = 0; $i < $reco->{K} && $i < @$repos; ++$i) {
 		if (!exists($reco_repo{$repos->[$i]})) {
 		    $reco_repo{$repos->[$i]} = 0.0;
 		}
-		$reco_repo{$repos->[$i]} += rank_score($i) * $reco->{weight};
+		$reco_repo{$repos->[$i]} += &{$reco->{score}}($i) * $reco->{weight};
 	    }
 	}
 	foreach my $rid (keys(%reco_repo)) {

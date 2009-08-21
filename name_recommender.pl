@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    SIM_NAME_MAX => 10000
+    SIM_NAME_MAX => 5000
 };
 $|=1;
 
@@ -87,7 +87,7 @@ sub repo_score
     my $max_sim = 0.0;
     my $users = $repo->users($id);
 
-#    return $repo->freq($id);
+    return $repo->freq($id);
 
     foreach my $rid (@$user_repos) {
 	my $sim = sim($users, $repo->hash_users($rid));

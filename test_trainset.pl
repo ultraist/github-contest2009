@@ -22,14 +22,25 @@ $|=1;
     my $i = 0;
     my $success = 0.0;
     my $match = 0.0;
-    
+    my @count;
     $repo->set_lang($lang);
     $repo->ranking($user);
+    
 
     foreach my $uid (@{$test->users()}) {
 	my $user_repos = $user->repos($uid);
 	my $test_repos = $results->repos($uid);
-	$success += Utils::intersection_count($user_repos, $test_repos);
+	if (!defined($test_repos)) {
+	    next;
+	}
+	for (my $i = 0; $i < @$test_repos; ++$i) {
+	    my $ok = Utils::intersection_count($user_repos, [$test_repos->[$i]]);
+	    $count[$i] += $ok;
+	    $success += $ok;
+	}
     }
-    printf("success: %f(%d/%d)\n", $success / $test->count(), $success, $test->count());
+    printf("success: %f(%d/%d)\n", $success / ($test->count() * 3), $success, $test->count() * 3);
+    for (my $i = 0; $i < 50; ++$i) {
+	printf("%d %d\n", $i, $count[$i] ? $count[$i]:0);
+    }
 }
