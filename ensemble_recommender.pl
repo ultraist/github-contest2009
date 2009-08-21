@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    DEF_K => 20
+    DEF_K => 50
 };
 $|=1;
 
@@ -14,31 +14,31 @@ $|=1;
 our @RECOMMENDER = (
 		    {
 			file => "./results_forkbase.txt",
-			weight => 0.6888,
+			weight => 2.0,
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]) ** 2; }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
-			weight => 0.624,
+			weight => 1.5,
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]) ** 0.9; }
 		    },
 		    {
 			file => "./results_author.txt",
-			weight => 1.0,
+			weight => 0.5,
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0] * 0.5) ** 1.6 }
 		    },
 		    {
 			file => "./results_name.txt",
-			weight => 0.2262,
+			weight => 0.2,
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]) ** 0.9; }
 		    },
 		    {
 			file => "./results_popular.txt",
-			weight => 0.0710,
+			weight => 0.05,
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]) ** 1.1; }
 		    }
