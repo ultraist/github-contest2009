@@ -2,6 +2,22 @@ package Utils;
 use strict;
 use warnings;
 
+sub C
+{
+    my ($n, $r) = @_;
+    return fact($n)/(fact($r) * fact($n - $r));
+}
+
+sub fact
+{
+    my $n = shift;
+    my $f = 1;
+    for (my $i = 1; $i <= $n; ++$i) {
+	$f *= $i;
+    }
+    return $f;
+}
+
 sub remove_list
 {
     my ($a, $remove_list) = @_;

@@ -32,7 +32,10 @@ $|=1;
     for (my $i = 0; $i < DEL_N; ++$i) {
 	my $uid = $users->[rand(scalar(@$users))];
 	my $repos = $user->repos($uid);
-	if (scalar(@$repos) < 5) {
+	if (scalar(@$repos) < 2) {
+	    redo;
+	}
+	if (scalar(@$repos) > 7) {
 	    redo;
 	}
 	if (defined($uids{$uid})) {

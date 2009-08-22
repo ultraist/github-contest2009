@@ -8,6 +8,30 @@ use Utils;
 
 $|=1;
 our $e = exp(1);
+our $p1 = 1.0 /  4.0; # similar
+our $p0 = 1.0 / 50.0; # not similar
+
+sub sim2
+{
+    my ($a, $h) = @_;
+    my $k = 0;
+    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
+    my $n = ($n1 > $n2 ? $n1:$n2);
+
+    if ($n == 0) {
+	return -100.0;
+    }
+    
+    foreach my $k (@$a) {
+	if (defined($h->{$k})) {
+	    $k += 1;
+	}
+    }
+
+    return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
+	  - (log($p0) * $k + log((1.0 - $p0)) * ($n - $k)));
+}
+
 sub sim
 {
     my ($a, $h) = @_;
@@ -32,12 +56,12 @@ sub author_score
     my $users = $repo->users($id);
 
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid));
+	my $sim = sim2($users, $repo->hash_users($rid));
 	if ($sim > $max_sim) {
 	    $max_sim = $sim;
 	}
     }
-    return $max_sim + 0.0001 * $repo->freq($id);
+    return $max_sim;# + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:
@@ -58,7 +82,7 @@ author_recommender:
 
 
     foreach my $uid (@{$test->users()}) {
-	printf("$0:                    %.2f%%      \r", 100 * $i / $count);
+	printf("$0: %.2f%%      \r", 100 * $i / $count);
 	my @result_tmp;
 	my @result;
 	my @user_repos = @{$user->repos($uid)};
@@ -83,7 +107,6 @@ author_recommender:
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
 		my $a = $repo->author($rid);
-		printf("$0: $tid\r");
 		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, \@origin_user_repos, $rid) });
 	    }
 	}
