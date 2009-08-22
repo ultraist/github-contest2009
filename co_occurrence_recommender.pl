@@ -11,8 +11,8 @@ use constant {
 };
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 /  4.0; # similar
-our $p0 = 1.0 / 50.0; # not similar
+our $p1 = 1.0 /  2.0; # similar
+our $p0 = 1.0 / 10.0; # not similar
 
 sub sim2
 {
@@ -22,13 +22,16 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return -100.0;
+	return 0.0;
     }
 
     foreach my $id (@$a) {
 	if (defined($h->{$id})) {
 	    $k += 1;
 	}
+    }
+    if ($k == 0) {
+	return 0.0;
     }
 
     return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
@@ -80,7 +83,7 @@ co_occurrence_recommender:
 	foreach my $other_id (@{$user->sample_users()}) {
 	    my $sim = sim2($user_repos, $user->hash_repos($other_id), $repo);
 	    if ($sim != 0.0) {
-		push(@sim_users, { id => $other_id, sim => $sim });
+		push(@sim_users, { id => $other_id, sim => $sim});
 	    }
 	}
 	@sim_users = sort { $b->{sim} <=> $a->{sim} } @sim_users;

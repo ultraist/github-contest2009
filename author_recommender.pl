@@ -8,8 +8,8 @@ use Utils;
 
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 /  4.0; # similar
-our $p0 = 1.0 / 50.0; # not similar
+our $p1 = 1.0 /  2.0; # similar
+our $p0 = 1.0 / 10.0; # not similar
 
 sub sim2
 {
@@ -19,7 +19,7 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return -100.0;
+	return 0.0;
     }
 
     foreach my $id (@$a) {
