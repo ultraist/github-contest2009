@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    DEL_N => 5000
+    DEL_N => 2000
 };
 $|=1;
 
@@ -33,9 +33,6 @@ $|=1;
 	my $uid = $users->[rand(scalar(@$users))];
 	my $repos = $user->repos($uid);
 	if (scalar(@$repos) < 2) {
-	    redo;
-	}
-	if (scalar(@$repos) > 7) {
 	    redo;
 	}
 	if (defined($uids{$uid})) {

@@ -21,9 +21,9 @@ sub sim2
     if ($n == 0) {
 	return -100.0;
     }
-    
-    foreach my $k (@$a) {
-	if (defined($h->{$k})) {
+
+    foreach my $id (@$a) {
+	if (defined($h->{$id})) {
 	    $k += 1;
 	}
     }

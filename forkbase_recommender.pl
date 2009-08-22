@@ -21,8 +21,8 @@ sub sim2
 	return -100.0;
     }
 
-    foreach my $k (@$a) {
-	if (defined($h->{$k})) {
+    foreach my $id (@$a) {
+	if (defined($h->{$id})) {
 	    $k += 1;
 	}
     }
@@ -64,7 +64,6 @@ sub forkbase_score
     }
     return $max_sim;# + 0.0001 * $repo->freq($id);
 }
-
 
 
 forkbase_recommender:
