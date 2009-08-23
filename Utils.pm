@@ -56,10 +56,10 @@ sub padding_result
 {
     my @result = @_;
 
-    while (scalar(@result) < 20) {
+    while (scalar(@result) < 10) {
 	push(@result, 0);
     }
-    return @result[0 .. 19];
+    return @result[0 .. 9];
 }
 
 sub includes
