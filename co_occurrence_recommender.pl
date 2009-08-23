@@ -11,32 +11,6 @@ use constant {
 };
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 /  2.0; # similar
-our $p0 = 1.0 / 10.0; # not similar
-
-sub sim2
-{
-    my ($a, $h) = @_;
-    my $k = 0;
-    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
-    my $n = ($n1 > $n2 ? $n1:$n2);
-
-    if ($n == 0) {
-	return 0.0;
-    }
-
-    foreach my $id (@$a) {
-	if (defined($h->{$id})) {
-	    $k += 1;
-	}
-    }
-    if ($k == 0) {
-	return 0.0;
-    }
-
-    return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
-	  - (log($p0) * $k + log((1.0 - $p0)) * ($n - $k)));
-}
 
 sub sim
 {
@@ -45,7 +19,7 @@ sub sim
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += log($e + 1.0 / $repo->freq($k));
+	    $ok += $repo->idf($k);
 	}
     }
     if ($ok == 0.0) {
@@ -81,7 +55,7 @@ co_occurrence_recommender:
 	my %co_repos;
 	
 	foreach my $other_id (@{$user->sample_users()}) {
-	    my $sim = sim2($user_repos, $user->hash_repos($other_id), $repo);
+	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo);
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim});
 	    }
@@ -90,7 +64,7 @@ co_occurrence_recommender:
 
 	for (my $i = 0; $i < K && $i < scalar(@sim_users); ++$i) {
 	    my $other_repos = $user->repos($sim_users[$i]->{id});
-	    my $w = $sim_users[$i]->{sim};#(1.0 - $i / K) ** 2;
+	    my $w = $sim_users[$i]->{sim};#(1.0 - $i / K) ** 2;#
 	    foreach my $rid (@$other_repos) {
 		if (!exists($co_repos{$rid})) {
 		    $co_repos{$rid} = 0.0;

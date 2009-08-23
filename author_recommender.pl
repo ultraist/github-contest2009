@@ -19,13 +19,16 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return 0.0;
+	return -0;
     }
 
     foreach my $id (@$a) {
 	if (defined($h->{$id})) {
 	    $k += 1;
 	}
+    }
+    if ($k == 0) {
+	return -0;
     }
 
     return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
@@ -54,14 +57,19 @@ sub author_score
     my ($repo, $user, $user_repos, $id) = @_;
     my $max_sim = 0.0;
     my $users = $repo->users($id);
-
+    my $sum = 0;
     foreach my $rid (@$user_repos) {
 	my $sim = sim2($users, $repo->hash_users($rid));
+	my $sum += $sim;
 	if ($sim > $max_sim) {
 	    $max_sim = $sim;
 	}
     }
-    return $max_sim;# + 0.0001 * $repo->freq($id);
+    if ($sum == 0) {
+	return -1e100;
+    }
+    return $sum / scalar(@$user_repos)
+#    return ;#$max_sim;# + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:

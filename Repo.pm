@@ -110,6 +110,13 @@ sub freq
     return $self->{id}->{$id}->{freq};
 }
 
+sub idf
+{
+    my($self, $id) = @_;
+    return $self->{id}->{$id}->{idf};
+}
+
+
 sub author_repos
 {
     my ($self, $id) = @_;
@@ -151,12 +158,24 @@ sub ranking
     my ($self, $user) = @_;
     my $max_count  = 0;
 
+    # freq
     foreach my $uid (@{$user->users()}) {
 	my $repos = $user->repos($uid);
 	foreach my $rid (@$repos) {
 	    $self->{id}->{$rid}->{freq} += 1.0;
 	}
     }
+    
+    # idf
+    
+    my $eps = 1e-64;
+    my $ud = log($eps + scalar(@{$user->users()}));
+    my $ilog2 = 1.0 / log(2.0);
+    foreach my $rid (keys(%{$self->{id}})) {
+	$self->{id}->{$rid}->{idf} = $ilog2 * ($ud - log($eps + $self->{id}->{$rid}->{freq}));
+    }
+
+    # normalize freq
     foreach my $rid (keys(%{$self->{id}})) {
 	if ($max_count < $self->{id}->{$rid}->{freq}) {
 	    $max_count = $self->{id}->{$rid}->{freq};
@@ -166,7 +185,8 @@ sub ranking
     foreach my $rid (keys(%{$self->{id}})) {
 	$self->{id}->{$rid}->{freq} *= $factor;
     }
-
+    
+    # rank
     my $rank = [];
     foreach my $rid (keys(%{$self->{id}})) {
 	push(@$rank, { id => $rid, score => $self->{id}->{$rid}->{freq}});
