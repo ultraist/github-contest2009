@@ -19,7 +19,7 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return -0;
+	return -1e32;
     }
 
     foreach my $id (@$a) {
@@ -28,7 +28,7 @@ sub sim2
 	}
     }
     if ($k == 0) {
-	return -0;
+	return -1e32;
     }
 
     return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
@@ -66,7 +66,7 @@ sub author_score
 	}
     }
     if ($sum == 0) {
-	return -1e100;
+	return -1e32;
     }
     return $sum / scalar(@$user_repos)
 #    return ;#$max_sim;# + 0.0001 * $repo->freq($id);
