@@ -38,7 +38,6 @@ co_occurrence_recommender:
     my $test = new Result("./download/test.txt", $lang);
     my $count = $test->count();
     my $i = 0;
-    my $kfrac = 1.0 / K;
     
     open(R, ">results_co_occurrence.txt") or die $!;
     
@@ -48,7 +47,6 @@ co_occurrence_recommender:
 
     foreach my $uid (@{$test->users()}) {
 	printf("$0: %.2f%%      \r", 100 * $i / $count);
-	my @nn;
 	my @result;
 	my @result_tmp;
 	my $user_repos = $user->repos($uid);
