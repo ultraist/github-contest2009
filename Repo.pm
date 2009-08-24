@@ -171,7 +171,7 @@ sub ranking
     my $ud = log($eps + scalar(@{$user->users()}));
     my $ilog2 = 1.0 / log(2.0);
     foreach my $rid (keys(%{$self->{id}})) {
-	$self->{id}->{$rid}->{idf} = 1 + $ilog2 * ($ud - log($eps + $self->{id}->{$rid}->{freq}));
+	$self->{id}->{$rid}->{idf} = 1 + $ilog2 * ($ud - log(3 + $self->{id}->{$rid}->{freq}));
     }
 
     # normalize freq
