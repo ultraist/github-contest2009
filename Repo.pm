@@ -169,7 +169,7 @@ sub ranking
     # idf
     my $eps = 1e-64;
     my $ud = log($eps + scalar(@{$user->users()}));
-    my $ilog = 1.0 / log(3.0);
+    my $ilog = 1.0 / log(2.0);
     foreach my $rid (keys(%{$self->{id}})) {
 	$self->{id}->{$rid}->{idf} = 1 + $ilog * ($ud - log($eps + $self->{id}->{$rid}->{freq}));
     }
