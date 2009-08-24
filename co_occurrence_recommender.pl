@@ -43,6 +43,7 @@ co_occurrence_recommender:
     open(R, ">results_co_occurrence.txt") or die $!;
     
     $repo->set_lang($lang);
+    $repo->set_users($user);
     $repo->ranking($user);
 
     foreach my $uid (@{$test->users()}) {
@@ -53,8 +54,16 @@ co_occurrence_recommender:
 	my $user_repos = $user->repos($uid);
 	my @sim_users;
 	my %co_repos;
-	
-	foreach my $other_id (@{$user->sample_users()}) {
+	my @sim_cand;
+
+	foreach my $rid (@$user_repos) {
+	    my $users = $repo->users($rid);
+	    if ($users) {
+		push(@sim_cand, @$users);
+	    }
+	}
+	@sim_cand = Utils::uniq(@sim_cand);
+	foreach my $other_id (@sim_cand) {
 	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo);
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim});
