@@ -21,7 +21,7 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
-			K => DEF_K,
+			K => DEF_K-10,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
@@ -39,7 +39,7 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_popular.txt",
 			weight => 0.1,
-			K => 20,
+			K => 10,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    }
 );
