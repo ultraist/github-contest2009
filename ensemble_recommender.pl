@@ -14,7 +14,7 @@ $|=1;
 our @RECOMMENDER = (
 		    {
 			file => "./results_forkbase.txt",
-			weight => 3.0,
+			weight => 2.0,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
@@ -38,7 +38,7 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_popular.txt",
-			weight => 0.04,
+			weight => 0.05,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    }
