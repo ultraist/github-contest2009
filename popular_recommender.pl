@@ -26,13 +26,13 @@ sub lang_score
 {
     my($lang, $repo, $user) = @_;
     my $score = 0.0;
-    
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
     }
     if (!$repo || scalar(@$repo) == 0) {
 	return 0.0;
     }
+    my ($n1, $n2) = (scalar(@$user), scalar(@$repo));
 
     foreach my $user_lang (@$user) {
 	foreach my $repo_lang (@$repo) {
@@ -41,7 +41,7 @@ sub lang_score
 	    }
 	}
     }
-    return $score;
+    return $score / ($n1 > $n2 ? $n1:$n2);
 }
 
 sub repo_score
