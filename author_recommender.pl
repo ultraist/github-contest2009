@@ -111,7 +111,7 @@ author_recommender:
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
 		my $a = $repo->author($rid);
-		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, \@origin_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score =>  author_score($repo, $user, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
