@@ -19,7 +19,7 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return -1e32;
+	return 0.0;
     }
 
     foreach my $id (@$a) {
@@ -28,7 +28,7 @@ sub sim2
 	}
     }
     if ($k == 0) {
-	return -1e32;
+	return 0.0;
     }
 
     return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
@@ -58,14 +58,14 @@ sub author_score
     my $max_sim = 0.0;
     my $users = $repo->users($id);
     my $sum = 0;
+    my $n = scalar(@$user_repos);
+    $n = $n == 0 ? 1:$n;
+    
     foreach my $rid (@$user_repos) {
 	my $sim = sim($users, $repo->hash_users($rid), $user);
 	$sum += $sim;
-	if ($sim > $max_sim) {
-	    $max_sim = $sim;
-	}
     }
-    return $sum;#$max_sim;# + 0.0001 * $repo->freq($id);
+    return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:
@@ -83,7 +83,6 @@ author_recommender:
     $repo->set_lang($lang);
     $repo->set_users($user);
     $repo->ranking($user);
-
 
     foreach my $uid (@{$test->users()}) {
 	printf("$0: %.2f%%      \r", 100 * $i / $count);
@@ -111,7 +110,7 @@ author_recommender:
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
 		my $a = $repo->author($rid);
-		push(@result_tmp, { id => $rid, score =>  author_score($repo, $user, \@origin_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
