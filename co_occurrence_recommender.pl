@@ -53,11 +53,18 @@ co_occurrence_recommender:
 	my @sim_users;
 	my %co_repos;
 	my @sim_cand;
-
+	my $min_repos = $user->repo_avg() / 4;
+	my $max_repos = $user->repo_sd() * 2;
+	
 	foreach my $rid (@$user_repos) {
 	    my $users = $repo->users($rid);
 	    if ($users) {
-		push(@sim_cand, @$users);
+		foreach my $id (@$users) {
+		    my $p = scalar(@{$user->repos($id)});
+		    if ($min_repos < $p && $p < $max_repos) {
+			push(@sim_cand, $id);
+		    }
+		}
 	    }
 	}
 	@sim_cand = Utils::uniq(@sim_cand);

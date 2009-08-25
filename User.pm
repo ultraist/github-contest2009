@@ -71,7 +71,18 @@ sub _load_user
 	push(@{$user_lang->{$uid}}, Utils::uniq(@skill_lang));
     }
     
-    return { id => $sample_user, all_id => $user, hash => $repo_hash, lang => $user_lang, n => $samples};
+    return { id => $sample_user, all_id => $user, hash => $repo_hash, lang => $user_lang, n => $samples, avg => $avg, sd => $sd };
+}
+
+sub repo_avg
+{
+    my ($self) = @_;
+    return $self->{avg};
+}
+sub repo_sd
+{
+    my ($self) = @_;
+    return $self->{sd};
 }
 
 sub repos
