@@ -33,12 +33,12 @@ sub sim2
 
 sub sim
 {
-    my ($a, $h, $repo) = @_;
+    my ($a, $h, $user) = @_;
     my $ok = 0;
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1;
+	    $ok += log($e + 1.0 / $user->freq($k));
 	}
     }
     if ($ok == 0) {
@@ -50,21 +50,24 @@ sub sim
 
 sub forkbase_score
 {
-    my ($repo, $user_repos, $id) = @_;
+    my ($repo, $user, $user_repos, $id) = @_;
     my $max_sim = 0.0;
+    my $sum = 0;
     my $users = $repo->users($id);
+    my $n = scalar(@$users);
+    $n = $n == 0 ? 1:$n;
 
     if ($users) {
 	foreach my $rid (@$user_repos) {
-	    my $sim = sim2($users, $repo->hash_users($rid));
-	    if ($sim > $max_sim) {
-		$max_sim = $sim;
-	    }
+	    my $sim = sim($users, $repo->hash_users($rid), $user);
+	    my $sum += $sim;
+#	    if ($sim > $max_sim) {
+#		$max_sim = $sim;
+#	    }
 	}
     }
-    return $max_sim;# + 0.0001 * $repo->freq($id);
+    return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
 }
-
 
 forkbase_recommender:
 {
@@ -79,6 +82,7 @@ forkbase_recommender:
     open(R, ">results_forkbase.txt") or die $!;
     
     $repo->set_lang($lang);
+    $repo->set_users($user);
     $repo->ranking($user);
 
     foreach my $uid (@{$test->users()}) {
@@ -92,7 +96,7 @@ forkbase_recommender:
 
 	foreach my $bid (@user_repos) {
 	    foreach my $rid (@{$repo->base_repos($bid)}) {
-		push(@result_tmp, { id => $rid, score => forkbase_score($repo, \@origin_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score => forkbase_score($repo, $user, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
