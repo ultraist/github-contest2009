@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    DEF_K => 20
+    DEF_K => 25
 };
 $|=1;
 
@@ -32,7 +32,7 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_name.txt",
-			weight => 0.25,
+			weight => 0.3,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
