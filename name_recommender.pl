@@ -9,6 +9,7 @@ use constant {
     SIM_NAME_MAX => 5000
 };
 $|=1;
+our $e = exp(1);
 
 sub split_name
 {
@@ -66,12 +67,12 @@ sub make_name_index
 
 sub sim
 {
-    my ($a, $h) = @_;
+    my ($a, $h, $user) = @_;
     my $ok = 0;
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1;
+	    $ok += log($e + 1.0 / $user->freq($k));
 	}
     }
     if ($ok == 0) {
@@ -87,16 +88,15 @@ sub repo_score
     my $max_sim = 0.0;
     my $users = $repo->users($id);
     my $sum = 0;
-    
-    return $repo->freq($id);
+    my $n = scalar(@$user_repos);
+    $n = $n == 0 ? 1:$n;
+#    return $repo->freq($id);
 
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid));
-	if ($sim > $max_sim) {
-	    $max_sim = $sim;
-	}
+	my $sim = sim($users, $repo->hash_users($rid), $user);
+	$sum += $sim;
     }
-    return $max_sim + 0.0001 * $repo->freq($id);
+    return $sum / $n;# + 0.0001 * $repo->freq($id);
 }
 
 name_recommender:
@@ -112,6 +112,7 @@ name_recommender:
     open(R, ">results_name.txt") or die $!;
     
     $repo->set_lang($lang);
+    $repo->set_users($user);
     $repo->ranking($user);
 
     my $idx = make_name_index($repo);
