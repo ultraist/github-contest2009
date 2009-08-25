@@ -32,6 +32,23 @@ sub _load_user
 	}
     }
     close(U);
+
+    #freq
+    my $freq = {};
+    my $max_count = 0;
+    foreach my $uid (keys(%{$user})) {
+	$freq->{$uid} = scalar(keys(%{$user->{$uid}}));
+    }
+    foreach my $uid (keys(%{$user})) {
+	if ($max_count < $freq->{$uid}) {
+	    $max_count = $freq->{$uid};
+	}
+    }
+    
+    my $factor = 1.0 / $max_count;
+    foreach my $uid (keys(%{$user})) {    
+	$freq->{$uid} = $factor * $freq->{$uid};
+    }
   
     my $sample_user = {};
     my $count = scalar(keys(%$user));
@@ -71,8 +88,16 @@ sub _load_user
 	push(@{$user_lang->{$uid}}, Utils::uniq(@skill_lang));
     }
     
-    return { id => $sample_user, all_id => $user, hash => $repo_hash, lang => $user_lang, n => $samples, avg => $avg, sd => $sd };
+    return { id => $sample_user, all_id => $user, hash => $repo_hash, freq => $freq, lang => $user_lang, n => $samples, avg => $avg, sd => $sd };
 }
+
+
+sub freq
+{
+    my ($self, $id) = @_;
+    return $self->{freq}->{$id};
+}
+
 
 sub repo_avg
 {

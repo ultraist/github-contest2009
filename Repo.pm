@@ -58,8 +58,36 @@ sub _load_repo
 	  }
 	}
     }
+
+    my $count = scalar(keys(%$repo));
+    my $avg = 0.0;
+    my $var = 0.0;
+    my $sd = 0.0;
+    my $samples = 0;
     
-    return { id => $repo, author => $author, n => $i };
+    foreach my $k (keys(%$repo)) {
+	my $p = scalar(keys(%{$repo->{$k}}));
+	$avg += $p / $count;
+    }
+    foreach my $k (keys(%$repo)) {
+	my $p = scalar(keys(%{$repo->{$k}}));
+	$var += ($p - $avg) ** 2 / ($count - 1);
+    }
+    $sd = sqrt($var);
+    
+    return { id => $repo, author => $author, n => $i, avg => $avg, sd => $sd };
+}
+
+sub user_avg
+{
+    my($self, $id) = @_;
+    return $self->{avg};
+}
+
+sub user_sd
+{
+    my($self, $id) = @_;
+    return $self->{sd};
 }
 
 sub name

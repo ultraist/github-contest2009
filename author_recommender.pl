@@ -37,12 +37,12 @@ sub sim2
 
 sub sim
 {
-    my ($a, $h) = @_;
+    my ($a, $h, $user) = @_;
     my $ok = 0;
 
     foreach my $k (@$a) {
 	if (defined($h->{$k})) {
-	    $ok += 1;
+	    $ok += log($e + 1.0 / $user->freq($k));
 	}
     }
     if ($ok == 0) {
@@ -59,17 +59,12 @@ sub author_score
     my $users = $repo->users($id);
     my $sum = 0;
     foreach my $rid (@$user_repos) {
-	my $sim = sim2($users, $repo->hash_users($rid));
-	my $sum += $sim;
+	my $sim = sim($users, $repo->hash_users($rid), $user);
 	if ($sim > $max_sim) {
 	    $max_sim = $sim;
 	}
     }
-    if ($sum == 0) {
-	return -1e32;
-    }
-    return $sum / scalar(@$user_repos)
-#    return ;#$max_sim;# + 0.0001 * $repo->freq($id);
+    return $max_sim + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:
