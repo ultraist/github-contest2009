@@ -14,31 +14,31 @@ $|=1;
 our @RECOMMENDER = (
 		    {
 			file => "./results_forkbase.txt",
-			weight => 2.0,
+			weight => 1.0,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
-			weight => 1.5,
+			weight => 1.05,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_author.txt",
-			weight => 0.5,
+			weight => 0.84,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
-		    {
-			file => "./results_name.txt",
-			weight => 0.06,
-			K => DEF_K,
-			score => sub { 1.0 / (1.5 + $_[0]); }
-		    },
+#		    {
+#			file => "./results_name.txt",
+#			weight => 0.06,
+#			K => DEF_K,
+#			score => sub { 1.0 / (1.5 + $_[0]); }
+#		    },
 		    {
 			file => "./results_popular.txt",
-			weight => 0.05,
+			weight => 0.4,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    }

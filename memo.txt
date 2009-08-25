@@ -1,6 +1,6 @@
 # name                 success / sets
 
-# forkbase          23.76  / 0.08082 = 293.9866
-# co_occurrence     24.54  / 0.80470 =  30.4958
-# author            20.05  / 0.67015 =  29.9186
-# popular            6.578 / 1.00000 =   6.5780
+# forkbase          23.76,  1.0
+# co_occurrence     24.81,  1.05
+# author            19.96,  0.84
+# popular            9.356, 0.4
