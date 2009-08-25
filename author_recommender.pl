@@ -60,11 +60,12 @@ sub author_score
     my $sum = 0;
     foreach my $rid (@$user_repos) {
 	my $sim = sim($users, $repo->hash_users($rid), $user);
+	$sum += $sim;
 	if ($sim > $max_sim) {
 	    $max_sim = $sim;
 	}
     }
-    return $max_sim + 0.0001 * $repo->freq($id);
+    return $sum;#$max_sim;# + 0.0001 * $repo->freq($id);
 }
 
 author_recommender:
