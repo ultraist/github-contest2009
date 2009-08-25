@@ -86,7 +86,8 @@ sub repo_score
     my ($repo, $user, $user_repos, $id) = @_;
     my $max_sim = 0.0;
     my $users = $repo->users($id);
-
+    my $sum = 0;
+    
     return $repo->freq($id);
 
     foreach my $rid (@$user_repos) {
