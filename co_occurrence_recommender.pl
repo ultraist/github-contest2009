@@ -54,8 +54,8 @@ co_occurrence_recommender:
 	my %co_repos;
 	my @sim_cand;
 	my $min_repos = $user->repo_avg() / 4;
-	my $max_repos = $user->repo_sd() * 2;
-	
+	my $max_repos = $user->repo_avg() + $user->repo_sd() * 3;
+
 	foreach my $rid (@$user_repos) {
 	    my $users = $repo->users($rid);
 	    if ($users) {
