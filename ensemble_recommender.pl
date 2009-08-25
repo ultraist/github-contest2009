@@ -38,9 +38,9 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_popular.txt",
-			weight => 1e-32,
+			weight => 0.05,
 			K => 10,
-			score => sub { 1.0; }
+			score => sub { 1.0 / (1.0 + $_[0]); }
 		    }
 );
 
