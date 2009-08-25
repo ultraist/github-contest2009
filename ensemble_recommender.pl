@@ -24,12 +24,12 @@ our @RECOMMENDER = (
 			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
-#		    {
-#			file => "./results_author.txt",
-#			weight => 0.5,
-#			K => DEF_K,
-#			score => sub { 1.0 / (1.5 + $_[0]); }
-#		    },
+		    {
+			file => "./results_author.txt",
+			weight => 0.4,
+			K => DEF_K,
+			score => sub { 1.0 / (1.5 + $_[0]); }
+		    },
 #		    {
 #			file => "./results_name.txt",
 #			weight => 0.05,
