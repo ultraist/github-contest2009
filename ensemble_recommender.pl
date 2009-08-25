@@ -39,7 +39,7 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_popular.txt",
 			weight => 0.1,
-			K => 10,
+			K => 20,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    }
 );
