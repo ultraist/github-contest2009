@@ -12,6 +12,10 @@ sub new
     return bless($user, $pkg);
 }
 
+sub idf_comp
+{
+}
+
 sub _load_user
 {
     my ($filename, $lang) = @_;
@@ -35,10 +39,25 @@ sub _load_user
 
     #freq
     my $freq = {};
+    my $idf = {};
     my $max_count = 0;
+    my %repo;
     foreach my $uid (keys(%{$user})) {
 	$freq->{$uid} = scalar(keys(%{$user->{$uid}}));
+	foreach my $rid (keys(%{$user->{$uid}})) {
+	    $repo{$rid} = 1;
+	}
     }
+    
+    # idf
+    my $eps = 1e-64;
+    my $rd = log($eps + scalar(keys(%repo)));
+    my $ilog = 1.0 / log(2.0);
+    foreach my $uid (keys(%$user)) {
+	$idf->{$uid} = 1 + $ilog * ($rd - log($eps + $freq->{$uid}));
+    }
+
+    # normalize freq
     foreach my $uid (keys(%{$user})) {
 	if ($max_count < $freq->{$uid}) {
 	    $max_count = $freq->{$uid};
@@ -88,7 +107,13 @@ sub _load_user
 	push(@{$user_lang->{$uid}}, Utils::uniq(@skill_lang));
     }
     
-    return { id => $sample_user, all_id => $user, hash => $repo_hash, freq => $freq, lang => $user_lang, n => $samples, avg => $avg, sd => $sd };
+    return { id => $sample_user, all_id => $user, hash => $repo_hash, freq => $freq, idf => $idf, lang => $user_lang, n => $samples, avg => $avg, sd => $sd };
+}
+
+sub idf
+{
+    my ($self, $id) = @_;
+    return $self->{idf}->{$id};
 }
 
 
