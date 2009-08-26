@@ -149,5 +149,3 @@ name_recommender:
     }
     close(R);
 }
-
-
