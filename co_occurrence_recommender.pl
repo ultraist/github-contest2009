@@ -7,7 +7,7 @@ use Result;
 use Utils;
 
 use constant {
-    K => 100
+    K => 80
 };
 $|=1;
 our $e = exp(1);
