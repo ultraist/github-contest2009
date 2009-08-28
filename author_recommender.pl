@@ -8,8 +8,8 @@ use Utils;
 
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 /  2.0; # similar
-our $p0 = 1.0 / 50.0; # not similar
+our $p1 = 1.0 / 2.0;  # similar
+our $p0 = 1.0 / 14.0; # not similar
 
 sub sim2
 {
@@ -62,7 +62,7 @@ sub author_score
     $n = $n == 0 ? 1:$n;
     
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid), $user);
+	my $sim = sim($users, $repo->hash_users($rid), $user) + sim2($users, $repo->hash_users($rid));
 	$sum += $sim;
     }
     return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
