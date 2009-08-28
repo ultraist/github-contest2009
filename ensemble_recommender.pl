@@ -32,7 +32,7 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_name.txt",
-			weight => 0.6,
+			weight => 0.7,
 			K => DEF_K,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
