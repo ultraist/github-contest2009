@@ -66,7 +66,7 @@ sub author_score
     $n = $n == 0 ? 1:$n;
     
     foreach my $rid (@$user_repos) {
-	my $sim = sim2($users, $repo->hash_users($rid));#sim($users, $repo->hash_users($rid), $user);
+	my $sim = sim2($users, $repo->hash_users($rid)) + sim($users, $repo->hash_users($rid), $user);
 	$sum += $sim;
     }
     return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
