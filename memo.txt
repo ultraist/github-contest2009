@@ -1,7 +1,7 @@
 # name                 success / sets
 
-# forkbase          23.76,  1.0
-# co_occurrence     24.81,  1.05
-# author            20.63,  0.84
-# name
-# popular            9.356, 0.4
+# forkbase          23.76
+# co_occurrence     24.81
+# author            20.69
+# name              23.12
+# popular            9.356
