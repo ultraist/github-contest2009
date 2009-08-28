@@ -2,5 +2,5 @@
 
 # forkbase          23.76,  1.0
 # co_occurrence     24.81,  1.05
-# author            19.96,  0.84
+# author            20.25,  0.84
 # popular            9.356, 0.4
