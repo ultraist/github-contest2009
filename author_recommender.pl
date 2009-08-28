@@ -8,8 +8,16 @@ use Utils;
 
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 / 2.0;  # similar
-our $p0 = 1.0 / 14.0; # not similar
+our $p1 = 1.0 / 4.0;  # similar
+our $p0 = 1.0 / 50.0; # not similar
+our $min_lrt = -likelihood_ratio_test(0, 1);
+
+sub likelihood_ratio_test
+{
+    my ($k, $n) = @_;
+    return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
+	    - (log($p0) * $k + log((1.0 - $p0)) * ($n - $k)));
+}
 
 sub sim2
 {
@@ -19,20 +27,16 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return 0.0;
+	return $min_lrt + likelihood_ratio_test(0, 1.0); #0
     }
-
+    
     foreach my $id (@$a) {
 	if (defined($h->{$id})) {
 	    $k += 1;
 	}
     }
-    if ($k == 0) {
-	return 0.0;
-    }
 
-    return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
-	  - (log($p0) * $k + log((1.0 - $p0)) * ($n - $k)));
+    return $min_lrt + likelihood_ratio_test($k / $n, 1.0);
 }
 
 sub sim
@@ -62,7 +66,7 @@ sub author_score
     $n = $n == 0 ? 1:$n;
     
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid), $user) + sim2($users, $repo->hash_users($rid));
+	my $sim = sim2($users, $repo->hash_users($rid));#sim($users, $repo->hash_users($rid), $user);
 	$sum += $sim;
     }
     return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
