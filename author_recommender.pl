@@ -67,32 +67,6 @@ sub lang_score
     return $score / ($n1 > $n2 ? $n1:$n2);
 }
 
-
-sub split_name
-{
-    my $name = shift;
-    my @n;
-    my @ret;
-    
-    push(@n, split(/_+/, $name));
-    push(@n, split(/\-+/, $name));
-    
-    @n = Utils::uniq(@n);
-    
-    foreach my $nn (@n) {
-	$nn =~ tr/A-Z/a-z/;
-	if (length($nn) > 3) {
-	    $nn =~ s/ies$/ty/;
-	    $nn =~ s/es$//;
-	    $nn =~ s/ed$//;
-	    $nn =~ s/s$//;
-	}
-	push(@ret, $nn);
-    }
-    
-    return @ret;
-}
-
 sub sim
 {
     my ($a, $h, $user) = @_;

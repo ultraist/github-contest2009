@@ -95,7 +95,7 @@ co_occurrence_recommender:
 	}
 	@sim_cand = Utils::uniq(@sim_cand);
 	foreach my $other_id (@sim_cand) {
-	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo) + 0.25 * lang_score($lang, $user_langs, $user->langs($other_id));
+	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo) + 0.05 * lang_score($lang, $user_langs, $user->langs($other_id));
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim});
 	    }

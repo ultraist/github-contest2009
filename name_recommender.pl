@@ -82,21 +82,43 @@ sub sim
     return $ok / ($n1 > $n2 ? $n1:$n2);
 }
 
+sub lang_score
+{
+    my($lang, $repo, $user) = @_;
+    my $score = 0.0;
+    if (!$user || scalar(@$user) == 0) {
+	return 0.0;
+    }
+    if (!$repo || scalar(@$repo) == 0) {
+	return 0.0;
+    }
+    my ($n1, $n2) = (scalar(@$user), scalar(@$repo));
+
+    foreach my $user_lang (@$user) {
+	foreach my $repo_lang (@$repo) {
+	    if ($user_lang eq $repo_lang) {
+               $score += log($e + 1.0 / $lang->freq($user_lang));
+	    }
+	}
+    }
+    return $score / ($n1 > $n2 ? $n1:$n2);
+}
+
 sub repo_score
 {
-    my ($repo, $user, $user_repos, $id) = @_;
+    my ($repo, $user, $lang, $user_repos, $id) = @_;
     my $max_sim = 0.0;
     my $users = $repo->users($id);
+    my $repo_langs = $repo->langs($id);    
     my $sum = 0;
     my $n = scalar(@$user_repos);
     $n = $n == 0 ? 1:$n;
-#    return $repo->freq($id);
 
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid), $user);
+	my $sim = sim($users, $repo->hash_users($rid), $user) + 0.05 * lang_score($lang, $repo_langs, $repo->langs($rid));
 	$sum += $sim;
     }
-    return $sum / $n;# + 0.0001 * $repo->freq($id);
+    return $sum / $n;
 }
 
 name_recommender:
@@ -114,6 +136,8 @@ name_recommender:
     $repo->set_lang($lang);
     $repo->set_users($user);
     $repo->ranking($user);
+    $lang->ranking($repo);
+    $lang->make_lang_repos($repo);
 
     my $idx = make_name_index($repo);
 
@@ -135,7 +159,7 @@ name_recommender:
 	    }
 	}
 	foreach my $rid (@sim_repos) {
-	    push(@result_tmp, { id => $rid, score => repo_score($repo, $user, $user_repos, $rid) });
+	    push(@result_tmp, { id => $rid, score => repo_score($repo, $user, $lang, $user_repos, $rid) });
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
 	foreach my $rid (@result_tmp) {
