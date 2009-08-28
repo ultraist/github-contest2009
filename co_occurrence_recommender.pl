@@ -12,26 +12,6 @@ use constant {
 $|=1;
 our $e = exp(1);
 
-sub lang_score
-{
-    my($lang, $repo, $user) = @_;
-    my $score = 0.0;
-    if (!$user || scalar(@$user) == 0) {
-	return 0.0;
-    }
-    if (!$repo) {
-	return 0.0;
-    }
-    my ($n1, $n2) = (scalar(@$user), scalar(keys(%$repo)));
-
-    foreach my $user_lang (@$user) {
-	if (defined($repo->{$user_lang})) {
-	    $score += log($e + 1.0 / $lang->freq($user_lang));
-	}
-    }
-    return $score / ($n1 > $n2 ? $n1:$n2);
-}
-
 sub sim
 {
     my ($a, $h, $repo) = @_;
@@ -97,7 +77,7 @@ co_occurrence_recommender:
 	}
 	@sim_cand = Utils::uniq(@sim_cand);
 	foreach my $other_id (@sim_cand) {
-	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo) + 0.05 * lang_score($lang, \%user_langs_hash, $user->langs($other_id));
+	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo);
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim});
 	    }
