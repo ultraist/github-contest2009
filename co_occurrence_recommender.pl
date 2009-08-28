@@ -14,21 +14,19 @@ our $e = exp(1);
 
 sub lang_score
 {
-    my($lang, $user, $other) = @_;
+    my($lang, $repo, $user) = @_;
     my $score = 0.0;
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
     }
-    if (!$other || scalar(@$other) == 0) {
+    if (!$repo) {
 	return 0.0;
     }
-    my ($n1, $n2) = (scalar(@$user), scalar(@$other));
+    my ($n1, $n2) = (scalar(@$user), scalar(keys(%$repo)));
 
     foreach my $user_lang (@$user) {
-	foreach my $other_lang (@$other) {
-	    if ($user_lang eq $other_lang) {
-               $score += log($e + 1.0 / $lang->freq($user_lang));
-	    }
+	if (defined($repo->{$user_lang})) {
+	    $score += log($e + 1.0 / $lang->freq($user_lang));
 	}
     }
     return $score / ($n1 > $n2 ? $n1:$n2);
@@ -81,6 +79,10 @@ co_occurrence_recommender:
 	my @sim_cand;
 	my $min_repos = $user->repo_avg() / 4;
 	my $max_repos = $user->repo_avg() + $user->repo_sd() * 3;
+	my %user_lang_hash;
+	foreach my $user_lang (@$user_langs) {
+	    $user_lang_hash{$user_lang} = 1;
+	}
 
 	foreach my $rid (@$user_repos) {
 	    my $users = $repo->users($rid);
@@ -95,7 +97,7 @@ co_occurrence_recommender:
 	}
 	@sim_cand = Utils::uniq(@sim_cand);
 	foreach my $other_id (@sim_cand) {
-	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo) + 0.05 * lang_score($lang, $user_langs, $user->langs($other_id));
+	    my $sim = sim($user_repos, $user->hash_repos($other_id), $repo) + 0.05 * lang_score($lang, \%user_langs_hash, $user->langs($other_id));
 	    if ($sim != 0.0) {
 		push(@sim_users, { id => $other_id, sim => $sim});
 	    }
