@@ -121,13 +121,14 @@ sub ranking
 sub repo_langs
 {
     my ($self, $id) = @_;
-    my $langs = [];
+#    my $langs = [];
 
-    if (defined($self->{lang}->{$id})) {
-	@$langs = @{$self->{lang}->{$id}};
-    }
+#    if (defined($self->{lang}->{$id})) {
+#	@$langs = @{$self->{lang}->{$id}};
+#    }
     
-    return $langs;
+#    return $langs;
+    return $self->{lang}->{$id};
 }
 
 sub rank
