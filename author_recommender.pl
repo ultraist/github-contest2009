@@ -10,14 +10,20 @@ $|=1;
 our $e = exp(1);
 our $p1 = 1.0 / 4.0;  # similar
 our $p0 = 1.0 / 50.0; # not similar
+our $log_p1 = log($p1);
+our $log_1_p1 = log(1.0 - $p1);
+our $log_p0 = log($p0);
+our $log_1_p0 = log(1.0 - $p0);
 our $min_lrt = -likelihood_ratio_test(0, 1);
+our $scale_lrt = 1.0 / ($min_lrt + likelihood_ratio_test(1, 1));
 
 sub likelihood_ratio_test
 {
     my ($k, $n) = @_;
-    return ((log($p1) * $k + log((1.0 - $p1)) * ($n - $k))
-	    - (log($p0) * $k + log((1.0 - $p0)) * ($n - $k)));
+    return (($log_p1 * $k + $log_1_p1 * ($n - $k))
+	    - ($log_p0 * $k + $log_1_p0 * ($n - $k)));
 }
+
 
 sub sim2
 {
@@ -27,7 +33,7 @@ sub sim2
     my $n = ($n1 > $n2 ? $n1:$n2);
 
     if ($n == 0) {
-	return $min_lrt + likelihood_ratio_test(0, 1.0); #0
+	return 0;
     }
     
     foreach my $id (@$a) {
@@ -36,7 +42,55 @@ sub sim2
 	}
     }
 
-    return $min_lrt + likelihood_ratio_test($k / $n, 1.0);
+    return $scale_lrt * ($min_lrt + likelihood_ratio_test($k / $n, 1.0));
+}
+
+sub lang_score
+{
+    my($lang, $repo, $user) = @_;
+    my $score = 0.0;
+    if (!$user || scalar(@$user) == 0) {
+	return 0.0;
+    }
+    if (!$repo || scalar(@$repo) == 0) {
+	return 0.0;
+    }
+    my ($n1, $n2) = (scalar(@$user), scalar(@$repo));
+
+    foreach my $user_lang (@$user) {
+	foreach my $repo_lang (@$repo) {
+	    if ($user_lang eq $repo_lang) {
+               $score += log($e + 1.0 / $lang->freq($user_lang));
+	    }
+	}
+    }
+    return $score / ($n1 > $n2 ? $n1:$n2);
+}
+
+
+sub split_name
+{
+    my $name = shift;
+    my @n;
+    my @ret;
+    
+    push(@n, split(/_+/, $name));
+    push(@n, split(/\-+/, $name));
+    
+    @n = Utils::uniq(@n);
+    
+    foreach my $nn (@n) {
+	$nn =~ tr/A-Z/a-z/;
+	if (length($nn) > 3) {
+	    $nn =~ s/ies$/ty/;
+	    $nn =~ s/es$//;
+	    $nn =~ s/ed$//;
+	    $nn =~ s/s$//;
+	}
+	push(@ret, $nn);
+    }
+    
+    return @ret;
 }
 
 sub sim
@@ -58,15 +112,18 @@ sub sim
 
 sub author_score
 {
-    my ($repo, $user, $user_repos, $id) = @_;
+    my ($repo, $user, $lang, $user_repos, $id) = @_;
     my $max_sim = 0.0;
     my $users = $repo->users($id);
     my $sum = 0;
     my $n = scalar(@$user_repos);
+    my $repo_langs = $repo->langs($id);
+    my $name = $repo->langs($id);
+    
     $n = $n == 0 ? 1:$n;
     
     foreach my $rid (@$user_repos) {
-	my $sim = sim2($users, $repo->hash_users($rid)) + sim($users, $repo->hash_users($rid), $user);
+	my $sim = sim($users, $repo->hash_users($rid), $user) + lang_score($lang, $repo_langs, $repo->langs($rid));
 	$sum += $sim;
     }
     return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
@@ -86,7 +143,8 @@ author_recommender:
     
     $repo->set_lang($lang);
     $repo->set_users($user);
-    $repo->ranking($user);
+    $lang->ranking($repo);
+    $lang->make_lang_repos($repo);
 
     foreach my $uid (@{$test->users()}) {
 	printf("$0: %.2f%%      \r", 100 * $i / $count);
@@ -114,7 +172,7 @@ author_recommender:
 	foreach my $tid (@user_repos) {
 	    foreach my $rid (@{$repo->author_repos($tid)}) {
 		my $a = $repo->author($rid);
-		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, \@origin_user_repos, $rid) });
+		push(@result_tmp, { id => $rid, score => $author_freq{$a} * author_score($repo, $user, $lang, \@origin_user_repos, $rid) });
 	    }
 	}
 	@result_tmp = sort { $b->{score} <=> $a->{score} } @result_tmp;
