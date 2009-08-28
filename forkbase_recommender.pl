@@ -38,21 +38,18 @@ sub lang_score
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
     }
-    if (!$repo || scalar(@$repo) == 0) {
+    if (!$repo) {
 	return 0.0;
     }
-    my ($n1, $n2) = (scalar(@$user), scalar(@$repo));
+    my ($n1, $n2) = (scalar(@$user), scalar(keys(%$repo)));
 
     foreach my $user_lang (@$user) {
-	foreach my $repo_lang (@$repo) {
-	    if ($user_lang eq $repo_lang) {
-               $score += log($e + 1.0 / $lang->freq($user_lang));
-	    }
+	if (defined($repo->{$user_lang})) {
+	    $score += log($e + 1.0 / $lang->freq($user_lang));
 	}
     }
     return $score / ($n1 > $n2 ? $n1:$n2);
 }
-
 
 sub sim
 {
@@ -80,10 +77,14 @@ sub forkbase_score
     my $repo_langs = $repo->langs($id);    
     my $n = scalar(@$users);
     $n = $n == 0 ? 1:$n;
+    my %repo_lang_hash;
+    foreach my $repo_lang (@$repo_langs) {
+	$repo_lang_hash{$repo_lang} = 1;
+    }
 
     if ($users) {
 	foreach my $rid (@$user_repos) {
-	    my $sim = sim($users, $repo->hash_users($rid), $user) + 0.5 * lang_score($lang, $repo_langs, $repo->langs($rid));
+	    my $sim = sim($users, $repo->hash_users($rid), $user) + 0.1 * lang_score($lang, \%repo_lang_hash, $repo->langs($rid));
 	    my $sum += $sim;
 	}
     }
