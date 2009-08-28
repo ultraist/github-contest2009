@@ -61,12 +61,9 @@ sub forkbase_score
 	foreach my $rid (@$user_repos) {
 	    my $sim = sim($users, $repo->hash_users($rid), $user);
 	    my $sum += $sim;
-#	    if ($sim > $max_sim) {
-#		$max_sim = $sim;
-#	    }
 	}
     }
-    return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
+    return $sum / $n + 0.0001 * $repo->freq($id);
 }
 
 forkbase_recommender:
