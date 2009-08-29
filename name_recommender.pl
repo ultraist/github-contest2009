@@ -117,7 +117,7 @@ sub repo_score
     }
 
     foreach my $rid (@$user_repos) {
-	my $sim = sim($users, $repo->hash_users($rid), $user) + 0.5 * lang_score($lang, \%repo_lang_hash, $repo->langs($rid));
+	my $sim = sim($users, $repo->hash_users($rid), $user) + 0.05 * lang_score($lang, \%repo_lang_hash, $repo->langs($rid));
 	$sum += $sim;
     }
     return $sum / $n;
