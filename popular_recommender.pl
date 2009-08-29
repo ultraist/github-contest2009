@@ -82,14 +82,18 @@ popular_recommender:
 	my $user_repos = $user->repos($uid);
 	my $langs = $user->langs($uid);
 	my %user_lang_hash;
-	foreach my $user_lang (@{$user->langs($uid)}) {
-	    $user_lang_hash{$user_lang} = 1;
-	}
+        
+        
 
 	if (defined($langs) && scalar(@$langs) > 0) {
 	    my %lang_repos;
 	    my @minor_langs;
 	    my $c = 0;
+          
+            foreach my $user_lang (@{$user->langs($uid)}) {
+              $user_lang_hash{$user_lang} = 1;
+            }
+            
 	    foreach my $l (@$langs) {
 		push(@minor_langs, { lang => $l, freq => $lang->freq($l) });
 	    }
@@ -98,9 +102,11 @@ popular_recommender:
 	    foreach my $r (@{$lang->lang_repos($minor_langs[0]->{lang})}) {
 		$lang_repos{$r} = 1;
 	    }
-	    foreach my $r (@{$lang->lang_repos($minor_langs[1]->{lang})}) {
-		$lang_repos{$r} = 1;
-	    }
+            if ($minor_langs[1]->{lang}) {
+              foreach my $r (@{$lang->lang_repos($minor_langs[1]->{lang})}) {
+                $lang_repos{$r} = 1;
+              }
+            }
 	    
 	    foreach my $rid (keys(%lang_repos)) {
 		my $lang_score = lang_score($lang, \%user_lang_hash, $repo->langs($rid));
