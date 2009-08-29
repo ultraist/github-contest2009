@@ -99,7 +99,7 @@ sub author_score
     $n = $n == 0 ? 1:$n;
     
     foreach my $rid (@$user_repos) {
-	my $sim = 1.0 * sim($users, $repo->hash_users($rid), $user) + 0.8 * lang_score($lang, \%repo_lang_hash, $repo->langs($rid));
+	my $sim = 1.0 * sim($users, $repo->hash_users($rid), $user) + 0.25 * lang_score($lang, \%repo_lang_hash, $repo->langs($rid));
 	$sum += $sim;
     }
     return $sum / $n;#$max_sim;# + 0.0001 * $repo->freq($id);
