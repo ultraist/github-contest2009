@@ -24,7 +24,6 @@ sub likelihood_ratio_test
 	    - ($log_p0 * $k + $log_1_p0 * ($n - $k)));
 }
 
-
 sub sim2
 {
     my ($a, $h) = @_;
