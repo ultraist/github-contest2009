@@ -29,16 +29,14 @@ sub lang_score
     if (!$user || scalar(@$user) == 0) {
 	return 0.0;
     }
-    if (!$repo || scalar(@$repo) == 0) {
+    if (!$repo) {
 	return 0.0;
     }
-    my ($n1, $n2) = (scalar(@$user), scalar(@$repo));
+    my ($n1, $n2) = (scalar(@$user), scalar(keys(%$repo)));
 
     foreach my $user_lang (@$user) {
-	foreach my $repo_lang (@$repo) {
-	    if ($user_lang eq $repo_lang) {
-               $score += log($e + 1.0 / $lang->freq($user_lang));
-	    }
+	if (defined($repo->{$user_lang})) {
+	    $score += log($e + 1.0 / $lang->freq($user_lang));
 	}
     }
     return $score / ($n1 > $n2 ? $n1:$n2);
@@ -83,6 +81,10 @@ popular_recommender:
 	my @result;
 	my $user_repos = $user->repos($uid);
 	my $langs = $user->langs($uid);
+	my %user_lang_hash;
+	foreach my $user_lang (@{$user->langs($uid)}) {
+	    $user_lang_hash{$user_lang} = 1;
+	}
 
 	if (defined($langs) && scalar(@$langs) > 0) {
 	    my %lang_repos;
@@ -96,20 +98,22 @@ popular_recommender:
 	    foreach my $r (@{$lang->lang_repos($minor_langs[0]->{lang})}) {
 		$lang_repos{$r} = 1;
 	    }
+	    foreach my $r (@{$lang->lang_repos($minor_langs[1]->{lang})}) {
+		$lang_repos{$r} = 1;
+	    }
 	    
 	    foreach my $rid (keys(%lang_repos)) {
-		my $lang_score = lang_score($lang, $repo->langs($rid), $user->langs($uid));
-
+		my $lang_score = lang_score($lang, \%user_lang_hash, $repo->langs($rid));
 		push(@result_tmp, {
 		    id => $rid,
-		    score => $lang_score + 0.1 * $repo->freq($rid)
+		    score => $lang_score + 0.5 *  $repo->freq($rid)
 		});
 	    }
 	    for (my $i = 0; $i < 20; ++$i) {
 		my $rank_id = $repo->rank_id($i);
 		push(@result_tmp, {
 		    id => $rank_id,
-		    score => 0.1 * $repo->freq($rank_id)
+		    score => 0 + 0.5 * $repo->freq($rank_id)
 		});
 	    }
 	} else {
