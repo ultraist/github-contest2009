@@ -27,8 +27,8 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_author.txt",
 			weight => 0.6,
-			K => DEF_K + 20,
-			score => sub { 1.0 / (1.5 + $_[0]); }
+			K => DEF_K + 10,
+			score => sub { 1.0 / (1.5 + $_[0]) ** 0.8; }
 		    },
 		    {
 			file => "./results_name.txt",
