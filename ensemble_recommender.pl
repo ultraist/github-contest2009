@@ -10,13 +10,13 @@ $|=1;
 our @RECOMMENDER = (
 		    {
 			file => "./results_forkbase.txt",
-			weight => 2.0,
+			weight => 2.2,
 			K => 30,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
-			weight => 1.40,
+			weight => 1.45,
 			K => 30,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
