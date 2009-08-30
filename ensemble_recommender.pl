@@ -22,13 +22,13 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_author.txt",
-			weight => 0.55,
+			weight => 0.60,
 			K => 40,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_name.txt",
-			weight => 0.3,
+			weight => 0.35,
 			K => 30,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },

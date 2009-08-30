@@ -9,19 +9,6 @@ use Utils;
 $|=1;
 our $e = exp(1);
 
-sub match_lang
-{
-    my($repo, $user) = @_;
-
-    if (!$user || scalar(@$user) == 0) {
-	return 1;
-    }
-    if (!$repo || scalar(@$repo) == 0) {
-	return undef;
-    }
-    return Utils::intersection_count($repo, $user) > 0 ? 1:undef;
-}
-
 sub lang_score
 {
     my($lang, $repo, $user) = @_;
@@ -40,19 +27,6 @@ sub lang_score
 	}
     }
     return $score / ($n1 > $n2 ? $n1:$n2);
-}
-
-sub repo_score
-{
-    my ($repo, $id) = @_;
-    my $forks = $repo->fork_repos($id);
-    my $score = $repo->freq($id);
-    
-    foreach my $fid (@$forks) {
-	$score += $repo->freq($fid);
-    }
-
-    return $score;
 }
 
 popular_recommender:
