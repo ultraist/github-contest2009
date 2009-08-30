@@ -16,7 +16,7 @@ our @RECOMMENDER = (
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
-			weight => 1.55,
+			weight => 1.45,
 			K => 30,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
