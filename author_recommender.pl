@@ -8,41 +8,6 @@ use Utils;
 
 $|=1;
 our $e = exp(1);
-our $p1 = 1.0 / 4.0;  # similar
-our $p0 = 1.0 / 50.0; # not similar
-our $log_p1 = log($p1);
-our $log_1_p1 = log(1.0 - $p1);
-our $log_p0 = log($p0);
-our $log_1_p0 = log(1.0 - $p0);
-our $min_lrt = -likelihood_ratio_test(0, 1);
-our $scale_lrt = 1.0 / ($min_lrt + likelihood_ratio_test(1, 1));
-
-sub likelihood_ratio_test
-{
-    my ($k, $n) = @_;
-    return (($log_p1 * $k + $log_1_p1 * ($n - $k))
-	    - ($log_p0 * $k + $log_1_p0 * ($n - $k)));
-}
-
-sub sim2
-{
-    my ($a, $h) = @_;
-    my $k = 0;
-    my ($n1, $n2) = (scalar(@$a), scalar(keys(%$h)));
-    my $n = ($n1 > $n2 ? $n1:$n2);
-
-    if ($n == 0) {
-	return 0;
-    }
-    
-    foreach my $id (@$a) {
-	if (defined($h->{$id})) {
-	    $k += 1;
-	}
-    }
-
-    return $scale_lrt * ($min_lrt + likelihood_ratio_test($k / $n, 1.0));
-}
 
 sub lang_score
 {
