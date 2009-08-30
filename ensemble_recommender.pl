@@ -12,7 +12,7 @@ our @RECOMMENDER = (
 			file => "./results_forkbase.txt",
 			weight => 2.2,
 			K => 30,
-			score => sub { 1.0 / (0.8 + $_[0]); }
+			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
