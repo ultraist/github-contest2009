@@ -5,35 +5,31 @@ use User;
 use Lang;
 use Result;
 use Utils;
-use constant {
-    DEF_K => 30
-};
 $|=1;
-
 
 our @RECOMMENDER = (
 		    {
 			file => "./results_forkbase.txt",
 			weight => 2.0,
-			K => DEF_K,
+			K => 30,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
-			K => DEF_K,
+			K => 30,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
 			file => "./results_author.txt",
-			weight => 0.6,
-			K => DEF_K + 10,
-			score => sub { 1.0 / (1.5 + $_[0]) ** 1.2; }
+			weight => 0.65,
+			K => 40,
+			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
 			file => "./results_name.txt",
 			weight => 0.3,
-			K => DEF_K,
+			K => 30,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
@@ -43,12 +39,6 @@ our @RECOMMENDER = (
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    }
 );
-
-sub rank_score
-{
-    my $rank = shift;
-    return (1.0 / (1.5 + $rank));
-}
 
 sub load_recommender
 {
