@@ -7,28 +7,15 @@ $ ./mk_results.sh
 
 h2. System Architecture
 
-$ cat mk_results.sh
-#!/bin/sh
-
-TIMELOG="./timelog"
-
-echo `date` start >> $TIMELOG
-
-sh ./switch_contest.sh
-
-# make temporary results
+1. make temporary results
 perl forkbase_recommender.pl
 perl author_recommender.pl
 perl co_occurrence_recommender.pl
 perl name_recommender.pl
 perl popular_recommender.pl
 
-# ensemble
+2. ensemble
 perl ensemble_recommender.pl
 
-# make results
+3. make results.txt
 perl conv_result.pl ./results_ensemble.txt
-perl check_result.pl
-
-echo `date` end >> $TIMELOG
-
