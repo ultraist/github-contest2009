@@ -1,21 +1,20 @@
-h1. A Simple Recommender System
+h1. A Simple Recommender System 
 
 h2. Run
 
 $ ./mk_results.sh
 
-
 h2. System Architecture
 
-1. make temporary results
+1. make temporary results with unique feature recommenders.
 perl forkbase_recommender.pl
 perl author_recommender.pl
 perl co_occurrence_recommender.pl
 perl name_recommender.pl
 perl popular_recommender.pl
 
-2. ensemble
+2. blending temporary results
 perl ensemble_recommender.pl
 
-3. make results.txt
+3. make completed results
 perl conv_result.pl ./results_ensemble.txt
