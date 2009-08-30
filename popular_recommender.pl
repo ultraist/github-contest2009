@@ -102,11 +102,6 @@ popular_recommender:
 	    foreach my $r (@{$lang->lang_repos($minor_langs[0]->{lang})}) {
 		$lang_repos{$r} = 1;
 	    }
-            if ($minor_langs[1]->{lang}) {
-              foreach my $r (@{$lang->lang_repos($minor_langs[1]->{lang})}) {
-                $lang_repos{$r} = 1;
-              }
-            }
 	    
 	    foreach my $rid (keys(%lang_repos)) {
 		my $lang_score = lang_score($lang, \%user_lang_hash, $repo->langs($rid));
@@ -115,7 +110,7 @@ popular_recommender:
 		    score => $lang_score + 0.5 *  $repo->freq($rid)
 		});
 	    }
-	    for (my $i = 0; $i < 20; ++$i) {
+	    for (my $i = 0; $i < 30; ++$i) {
 		my $rank_id = $repo->rank_id($i);
 		push(@result_tmp, {
 		    id => $rank_id,
@@ -123,12 +118,12 @@ popular_recommender:
 		});
 	    }
 	} else {
-	    for (my $i = 0; $i < 20; ++$i) {
+	    for (my $i = 0; $i < 30; ++$i) {
 		my $rank_id = $repo->rank_id($i);
 		
 		push(@result_tmp, {
 		    id => $rank_id,
-		    score => $repo->freq($rank_id)
+		    score => 0.5 * $repo->freq($rank_id)
 		});
 	    }
 	}
@@ -139,7 +134,7 @@ popular_recommender:
 	    if (!Utils::includes($user_repos, $rid->{id})) {
 		push(@result, $rid->{id});
 		push(@$user_repos, $rid->{id});
-		if (++$c >= 20) {
+		if (++$c >= 30) {
 		    last;
 		}
 	    }
