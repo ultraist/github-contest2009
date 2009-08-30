@@ -86,9 +86,9 @@ ensemble_recommender:
 	    }
 	    for (my $i = 0; $i < $reco->{K} && $i < @$repos; ++$i) {
 		if (!exists($reco_repo{$repos->[$i]})) {
-		    $reco_repo{$repos->[$i]} = 0.0;
+		    $reco_repo{$repos->[$i]} = 1.0;
 		}
-		$reco_repo{$repos->[$i]} += &{$reco->{score}}($i) * $reco->{weight};
+		$reco_repo{$repos->[$i]} *= &{$reco->{score}}($i) * $reco->{weight};
 	    }
 	}
 	foreach my $rid (keys(%reco_repo)) {
