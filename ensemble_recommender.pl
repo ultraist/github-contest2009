@@ -21,13 +21,13 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
-			K => DEF_K - 10,
+			K => DEF_K,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
 			file => "./results_author.txt",
 			weight => 0.6,
-			K => DEF_K,
+			K => DEF_K + 10,
 			score => sub { 1.0 / (1.5 + $_[0]); }
 		    },
 		    {
