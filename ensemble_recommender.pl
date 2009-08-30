@@ -6,7 +6,7 @@ use Lang;
 use Result;
 use Utils;
 use constant {
-    DEF_K => 35
+    DEF_K => 30
 };
 $|=1;
 
@@ -21,7 +21,7 @@ our @RECOMMENDER = (
 		    {
 			file => "./results_co_occurrence.txt",
 			weight => 1.5,
-			K => DEF_K,
+			K => DEF_K - 10,
 			score => sub { 1.0 / (1.0 + $_[0]); }
 		    },
 		    {
