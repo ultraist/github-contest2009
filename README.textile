@@ -1,5 +1,7 @@
 h1. A Simple Recommender System 
 
+github contest: http://contest.github.com/
+
 h2. Run
 
 $ ./mk_results.sh
